@@ -1,10 +1,9 @@
-# Intégration continue : vérifie chaque push et chaque pull request.
+# Intégration continue : vérifie chaque pull request, et chaque push sur main via le workflow de déploiement.
 name: CI
 
 on:
-  push:
-    branches: [main]
   pull_request:
+  workflow_call:
 
 permissions:
   contents: read
@@ -14,7 +13,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  verifier:
+  verify:
     name: Types, tests, build, liens
     runs-on: ubuntu-latest
     steps:
@@ -33,6 +32,9 @@ jobs:
 
       - name: Vérifier les types
         run: npm run check
+
+      - name: Vérifier la mise en forme
+        run: npm run format:check
 
       - name: Tests unitaires
         run: npm test

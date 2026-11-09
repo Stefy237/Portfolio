@@ -37,8 +37,16 @@ const titleId = `win-${app.id}-title`;
   hidden
 >
   <div class="window__bar" data-drag>
-    <h2 class="window__title" id={titleId}>{app.windowTitle}</h2>
-    <button type="button" class="window__btn window__btn--max" data-action="maximize" aria-label={`Agrandir ${app.label}`} aria-pressed="false">
+    <h2 class="window__title" id={titleId}>
+      {app.windowTitle}
+    </h2>
+    <button
+      type="button"
+      class="window__btn window__btn--max"
+      data-action="maximize"
+      aria-label={`Agrandir ${app.label}`}
+      aria-pressed="false"
+    >
       <Icon name="maximize" size={15} />
     </button>
     <button type="button" class="window__btn window__btn--close" data-action="close" aria-label={`Fermer ${app.label}`}>

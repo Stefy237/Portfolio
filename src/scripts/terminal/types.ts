@@ -9,7 +9,7 @@ export interface TerminalData {
   osName: string;
   links: { github: string; linkedin: string; malt: string };
   cv: string | null;
-  projets: {
+  projects: {
     slug: string;
     name: string;
     summary: string;
@@ -20,6 +20,9 @@ export interface TerminalData {
   certifications: { name: string; status: string; targetDate: string | null }[];
   /** Applications ouvrables avec la commande « open ». */
   apps: { id: string; label: string }[];
+  /** Cibles du Makefile du homelab, rejouées par la commande « make ». */
+  makeTargets: { name: string; tool: string; role: string; log: string[] }[];
+  destroyLog: string[];
 }
 
 export type LineKind = 'out' | 'muted' | 'accent' | 'error' | 'command';

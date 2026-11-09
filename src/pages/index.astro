@@ -7,16 +7,16 @@ import MenuBar from '../components/os/MenuBar.astro';
 import Window from '../components/os/Window.astro';
 import Dock from '../components/os/Dock.astro';
 import Icon from '../components/ui/Icon.astro';
-import AProposApp from '../components/apps/AProposApp.astro';
-import ParcoursApp from '../components/apps/ParcoursApp.astro';
-import ProjetsApp from '../components/apps/ProjetsApp.astro';
+import AboutApp from '../components/apps/AboutApp.astro';
+import CareerApp from '../components/apps/CareerApp.astro';
+import ProjectsApp from '../components/apps/ProjectsApp.astro';
 import TerminalApp from '../components/apps/TerminalApp.astro';
 import HomelabApp from '../components/apps/HomelabApp.astro';
 import CertificationsApp from '../components/apps/CertificationsApp.astro';
-import RecommandationsApp from '../components/apps/RecommandationsApp.astro';
+import RecommendationsApp from '../components/apps/RecommendationsApp.astro';
 import FreelanceApp from '../components/apps/FreelanceApp.astro';
 import DossierApp from '../components/apps/DossierApp.astro';
-import MarcheApp from '../components/apps/MarcheApp.astro';
+import MarketApp from '../components/apps/MarketApp.astro';
 import FaqApp from '../components/apps/FaqApp.astro';
 import MailApp from '../components/apps/MailApp.astro';
 import { fallbackHref, visibleApps } from '../apps/registry';
@@ -32,87 +32,96 @@ const list = visibleApps();
 
 // Contenu de chaque fenêtre (le terminal est traité à part : il reçoit la liste des applications).
 const views = {
-  apropos: AProposApp,
-  parcours: ParcoursApp,
-  projets: ProjetsApp,
+  apropos: AboutApp,
+  parcours: CareerApp,
+  projets: ProjectsApp,
   homelab: HomelabApp,
   certifications: CertificationsApp,
-  recommandations: RecommandationsApp,
+  recommandations: RecommendationsApp,
   freelance: FreelanceApp,
   dossier: DossierApp,
-  marche: MarcheApp,
+  marche: MarketApp,
   faq: FaqApp,
   mail: MailApp,
 };
 ---
 
 <Base bodyClass="os">
-  <a class="skip-link" href="#apps">Aller aux applications</a>
+  <a class="skip-link" href="#apps">
+    Aller aux applications
+  </a>
   <MenuBar />
 
   <main class="desktop">
     <section class="home-widget" aria-labelledby="home-title">
       <h1 id="home-title">{site.name}</h1>
       <p class="muted">{site.title}</p>
-      <p><span class="pill pill--accent"><span class="status-dot" aria-hidden="true"></span>{site.availability}</span></p>
-      {
-        ready.cv ? (
-          <a class="btn btn--primary" href={site.documents.cv} download>
-            <Icon name="download" size={18} /> Télécharger mon CV
-          </a>
-        ) : (
-          <a class="btn btn--primary" href="/simple#dossier" data-open="dossier">
-            Mon dossier de candidature
-          </a>
-        )
-      }
+      <p>
+        <span class="pill pill--accent">
+          <span class="status-dot" aria-hidden="true"></span>
+          {site.availability}
+        </span>
+      </p>
+      {ready.cv ? (
+        <a class="btn btn--primary" href={site.documents.cv} download>
+          <Icon name="download" size={18} /> Télécharger mon CV
+        </a>
+      ) : (
+        <a class="btn btn--primary" href="/simple#dossier" data-open="dossier">
+          Mon dossier de candidature
+        </a>
+      )}
     </section>
 
     <nav id="apps" aria-label="Applications">
       <ul class="desktop__icons">
-        {
-          list
-            .filter((a) => a.desktop)
-            .map((app) => (
-              <li>
-                <a class="desk-icon" href={fallbackHref(app.id)} data-open={app.id}>
-                  <span class="desk-icon__glyph">
-                    <Icon name={app.icon} size={24} />
-                  </span>
-                  {app.label}
-                </a>
-              </li>
-            ))
-        }
+        {list
+          .filter((a) => a.desktop)
+          .map((app) => (
+            <li>
+              <a class="desk-icon" href={fallbackHref(app.id)} data-open={app.id}>
+                <span class="desk-icon__glyph">
+                  <Icon name={app.icon} size={24} />
+                </span>
+                {app.label}
+              </a>
+            </li>
+          ))}
       </ul>
     </nav>
 
-    <a class="note" href="/simple"><b>Recruteur pressé ?</b><br />Tout tient sur une page : version&nbsp;simple&nbsp;→</a>
-    <div class="desktop__watermark" aria-hidden="true">{site.osName}</div>
+    <a class="note" href="/simple">
+      <b>Recruteur pressé ?</b>
+      <br />
+      Tout tient sur une page : version&nbsp;simple&nbsp;→
+    </a>
+    <div class="desktop__watermark" aria-hidden="true">
+      {site.osName}
+    </div>
 
-    {
-      list.map((app) => {
-        if (app.id === 'terminal') {
-          return (
-            <Window app={app} variant="terminal">
-              <TerminalApp apps={list} />
-            </Window>
-          );
-        }
-        const View = views[app.id];
+    {list.map((app) => {
+      if (app.id === 'terminal') {
         return (
-          <Window app={app}>
-            <View />
+          <Window app={app} variant="terminal">
+            <TerminalApp apps={list} />
           </Window>
         );
-      })
-    }
+      }
+      const View = views[app.id];
+      return (
+        <Window app={app}>
+          <View />
+        </Window>
+      );
+    })}
   </main>
 
   <Dock apps={list} />
 
   <noscript>
-    <p class="noscript">JavaScript est désactivé : <a href="/simple">consultez la version simple du site</a>.</p>
+    <p class="noscript">
+      JavaScript est désactivé : <a href="/simple">consultez la version simple du site</a>.
+    </p>
   </noscript>
 </Base>
 

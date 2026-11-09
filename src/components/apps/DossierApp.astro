@@ -9,28 +9,25 @@ const lettreName = site.documents.lettre.split('/').pop();
 ---
 
 <div class="app">
-  {
-    ready.video ? (
-      <iframe
-        class="embed"
-        src={`https://www.youtube-nocookie.com/embed/${encodeURIComponent(site.videoYoutubeId)}`}
-        title={`Vidéo de présentation de ${site.firstName}`}
-        loading="lazy"
-        referrerpolicy="strict-origin-when-cross-origin"
-        allow="encrypted-media; picture-in-picture"
-        allowfullscreen
-      />
-    ) : (
-      <Todo block label="Vidéo de présentation (moins de 2 min) : site.videoYoutubeId" />
-    )
-  }
+  {ready.video ? (
+    <iframe
+      class="embed"
+      src={`https://www.youtube-nocookie.com/embed/${encodeURIComponent(site.videoYoutubeId)}`}
+      title={`Vidéo de présentation de ${site.firstName}`}
+      loading="lazy"
+      referrerpolicy="strict-origin-when-cross-origin"
+      allow="encrypted-media; picture-in-picture"
+      allowfullscreen
+    />
+  ) : (
+    <Todo block label="Vidéo de présentation (moins de 2 min) : site.videoYoutubeId" />
+  )}
 
   {(ready.cv || ready.lettre || import.meta.env.DEV) && (
-  <section class="app-block">
-    <h3>Documents</h3>
-    <ul class="files">
-      {
-        ready.cv ? (
+    <section class="app-block">
+      <h3>Documents</h3>
+      <ul class="files">
+        {ready.cv ? (
           <li>
             <a href={site.documents.cv} download>
               <Icon name="download" size={18} /> {cvName}
@@ -40,10 +37,8 @@ const lettreName = site.documents.lettre.split('/').pop();
           <li>
             <Todo label={`CV : dépose le PDF dans public${site.documents.cv}`} />
           </li>
-        )
-      }
-      {
-        ready.lettre ? (
+        )}
+        {ready.lettre ? (
           <li>
             <a href={site.documents.lettre} download>
               <Icon name="download" size={18} /> {lettreName}
@@ -53,21 +48,38 @@ const lettreName = site.documents.lettre.split('/').pop();
           <li>
             <Todo label={`Lettre : dépose le PDF dans public${site.documents.lettre}`} />
           </li>
-        )
-      }
-    </ul>
-  </section>
+        )}
+      </ul>
+    </section>
   )}
 
   <section class="app-block">
     <h3>En bref</h3>
     <dl class="facts">
-      <div><dt>Disponibilité</dt><dd>Octobre 2026</dd></div>
-      <div><dt>Contrat</dt><dd>CDI</dd></div>
-      <div><dt>Localisation</dt><dd>{site.location}</dd></div>
-      {site.mobility && <div><dt>Mobilité</dt><dd>{site.mobility}</dd></div>}
+      <div>
+        <dt>Disponibilité</dt>
+        <dd>Octobre 2026</dd>
+      </div>
+      <div>
+        <dt>Contrat</dt>
+        <dd>CDI</dd>
+      </div>
+      <div>
+        <dt>Localisation</dt>
+        <dd>{site.location}</dd>
+      </div>
+      {site.mobility && (
+        <div>
+          <dt>Mobilité</dt>
+          <dd>{site.mobility}</dd>
+        </div>
+      )}
     </dl>
   </section>
 
-  {ready.faq && <a href="/simple#faq" data-open="faq">Mes réponses aux questions d'entretien →</a>}
+  {ready.faq && (
+    <a href="/simple#faq" data-open="faq">
+      Mes réponses aux questions d'entretien →
+    </a>
+  )}
 </div>

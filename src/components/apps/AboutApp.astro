@@ -1,0 +1,76 @@
+---
+import { site } from '../../config/site';
+import { ready } from '../../lib/content';
+import Icon from '../ui/Icon.astro';
+import Todo from '../ui/Todo.astro';
+
+const initials = site.name
+  .split(' ')
+  .slice(0, 2)
+  .map((p) => p[0])
+  .join('');
+---
+
+<div class="app">
+  <div class="profile">
+    {ready.photo ? (
+      <img class="avatar" src={site.photo} alt={`Portrait de ${site.firstName}`} width="88" height="88" />
+    ) : (
+      <span class="avatar" aria-hidden="true">
+        {initials}
+      </span>
+    )}
+    <div>
+      <h3>Bonjour, je suis {site.firstName}.</h3>
+      <p class="muted">{site.title}</p>
+    </div>
+  </div>
+  {!ready.photo && <Todo label={`Photo : dépose ton image dans public${site.photo}`} />}
+
+  <p class="app-lead">{site.intro}</p>
+  {site.lookingFor ? <p>{site.lookingFor}</p> : <Todo label="Poste recherché : site.lookingFor" />}
+
+  <div class="link-row">
+    <span class="pill pill--accent">
+      <span class="status-dot" aria-hidden="true"></span>
+      {site.availability}
+    </span>
+    <span class="pill">{site.location}</span>
+    {site.mobility && <span class="pill">{site.mobility}</span>}
+  </div>
+
+  <div class="actions">
+    {ready.cv ? (
+      <a class="btn btn--primary" href={site.documents.cv} download>
+        <Icon name="download" size={18} /> Télécharger mon CV
+      </a>
+    ) : (
+      <a class="btn btn--primary" href="/simple#dossier" data-open="dossier">
+        Mon dossier de candidature
+      </a>
+    )}
+    {site.email ? (
+      <a class="btn" href={`mailto:${site.email}`}>
+        <Icon name="mail" size={18} /> M'écrire
+      </a>
+    ) : (
+      <Todo label="E-mail pro : site.email" />
+    )}
+  </div>
+
+  <div class="link-row">
+    {site.links.linkedin && (
+      <a href={site.links.linkedin} rel="me noopener">
+        LinkedIn <Icon name="external" size={14} />
+      </a>
+    )}
+    <a href={site.links.github} rel="me noopener">
+      GitHub <Icon name="external" size={14} />
+    </a>
+    {site.links.malt && (
+      <a href={site.links.malt} rel="noopener">
+        Malt <Icon name="external" size={14} />
+      </a>
+    )}
+  </div>
+</div>

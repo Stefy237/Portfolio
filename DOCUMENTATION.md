@@ -1,6 +1,6 @@
 # Documentation technique
 
-Ce document explique comment le site fonctionne et comment le faire évoluer. Pour savoir où en est le projet et ce qui reste à faire, voir [AVANCEMENT.md](./AVANCEMENT.md).
+Ce document explique comment le site fonctionne et comment le faire évoluer. Pour une explication pas à pas destinée à un débutant, voir [docs/GUIDE.md](./docs/GUIDE.md).
 
 ## Sommaire
 
@@ -25,7 +25,7 @@ Ce document explique comment le site fonctionne et comment le faire évoluer. Po
 - **Site 100 % statique.** Tout est calculé au build, y compris les appels à l'API GitHub. Le navigateur du visiteur ne télécharge que du HTML, du CSS, un peu de JavaScript et les polices. Il n'y a ni serveur, ni base de données, ni cookie.
 - **Le contenu est séparé du code.** Les textes vivent dans `src/config/site.ts` et `src/data/*.ts`. Les composants ne contiennent pas de texte personnel, à part quelques phrases d'interface.
 - **Rien de provisoire en production.** Ce qui n'est pas renseigné est visible en développement et invisible en production (voir [§6](#6-contenu-et--à-compléter-)).
-- **Une seule source pour deux présentations.** Les fenêtres du bureau (`src/components/apps/`) et la version simple (`src/pages/simple.astro`) ont chacune leur mise en page, mais lisent les mêmes données. Modifier `src/data/projets.ts` met donc à jour les deux.
+- **Une seule source pour deux présentations.** Les fenêtres du bureau (`src/components/apps/`) et la version simple (`src/pages/simple.astro`) ont chacune leur mise en page, mais lisent les mêmes données. Modifier `src/data/projects.ts` met donc à jour les deux.
 - **Amélioration progressive.** Sans JavaScript, les icônes et le dock sont de simples liens vers la version simple. Le JavaScript les transforme en lanceurs de fenêtres.
 - **Sécurité par défaut.** La CSP est stricte, aucun style ni script n'est écrit en ligne, et aucun secret n'arrive dans le navigateur (voir [§8](#8-sécurité)).
 
@@ -72,7 +72,7 @@ Dans le navigateur, trois scripts prennent le relais :
 | `icon`        | nom d'une icône de `src/components/ui/icons.ts`                           |
 | `desktop`     | `true` : icône sur le bureau                                              |
 | `dock`        | `true` : bouton dans le dock (les 4 premiers restent visibles sur mobile) |
-| `openOnStart` | `true` : ouverte au chargement, sur ordinateur et sur téléphone (terminal) |
+| `openOnStart` | `true` : ouverte au chargement, sur ordinateur uniquement (terminal)        |
 | `flush`       | `true` : sans marge intérieure (fenêtres « plateforme », terminal, mail)   |
 | `geometry`    | position et taille par défaut pour un écran 1440×900                      |
 | `publish`     | `false` : masquée en production (contenu absent)                          |
@@ -81,7 +81,7 @@ Dans le navigateur, trois scripts prennent le relais :
 
 ### 3.2 La fenêtre
 
-`src/components/os/Window.astro` produit une `<section role="dialog" hidden>`. Elle contient une barre de titre (`[data-drag]`), des boutons « Agrandir » et « Fermer », un bouton « Accueil » réservé au mobile, et une zone de contenu. La zone de contenu est un *container* CSS : les fenêtres adaptent leur mise en page à leur propre largeur (`@container`), pas à celle de l'écran.
+`src/components/os/Window.astro` produit une `<section role="dialog" hidden>`. Elle contient une barre de titre (`[data-drag]`), des boutons « Agrandir » et « Fermer », et une zone de contenu. La zone de contenu est un *container* CSS : les fenêtres adaptent leur mise en page à leur propre largeur (`@container`), pas à celle de l'écran.
 
 La géométrie par défaut est transmise par des attributs `data-x`, `data-y`, `data-w` et `data-h`, **jamais par un attribut `style`** : la CSP l'interdirait (voir [§8](#8-sécurité)).
 
@@ -103,9 +103,9 @@ La géométrie par défaut est transmise par des attributs `data-x`, `data-y`, `
 
 Tout se passe en CSS (`src/styles/os.css`, bloc `@media (max-width: 767px)`), plus une condition dans le gestionnaire (pas de déplacement) :
 
-- au démarrage, le terminal s'ouvre en plein écran et tape `fastfetch` tout seul : on comprend l'idée du site en deux secondes ;
-- le bouton « ‹ Accueil » ferme la fenêtre et révèle l'écran d'accueil : carte de présentation, puis icônes en grille de 4 ;
-- toutes les fenêtres s'ouvrent en plein écran ;
+- au démarrage, aucune fenêtre ne s'ouvre : l'écran d'accueil montre la carte de présentation, les icônes en grille de 4 et, en bas à droite, le post-it « Recruteur pressé ? » ;
+- les fenêtres s'ouvrent en cartes encadrées entre la barre de menu et le dock, avec un léger décalage en cascade quand on en empile plusieurs (variable CSS `--cascade`) ;
+- le bouton « Agrandir » passe la fenêtre en plein écran ;
 - le dock garde 4 applications (Projets, Parcours, Terminal, Mail) et le bouton CV ;
 - `fastfetch` retire son logo quand le terminal fait moins de 64 caractères de large.
 
@@ -149,7 +149,7 @@ Les styles sont dans `src/styles/platforms.css`, avec des préfixes : `li__` (Pa
 - **Envoyer** construit un lien `mailto:` (`src/scripts/mail-core.ts`, testé) et ouvre la messagerie du visiteur avec l'objet et le message préremplis. Le message part donc du vrai compte du recruteur, et aucune donnée ne passe par un serveur. L'adresse est encodée pour qu'on ne puisse pas y glisser des paramètres (`?cc=…`).
 - Les **modèles** (`src/data/mail.ts`) remplissent l'objet et le corps, puis sélectionnent le premier `[champ à compléter]`.
 - **Copier l'adresse** sert aux visiteurs qui n'ont pas de messagerie configurée (cas fréquent sur un ordinateur de bureau).
-- Pour un envoi sans quitter la page, il faudrait un petit serveur : voir AVANCEMENT.md, « Envoi direct depuis la fenêtre Mail ».
+- Pour un envoi sans quitter la page, il faudrait un petit serveur.
 
 ## 4. Thème clair et sombre
 
@@ -228,7 +228,7 @@ C'est la seule façon d'afficher la vraie interface de LinkedIn, en utilisant l'
 
 ### Photo et bannière
 
-Dépose `public/images/photo.jpg` (portrait, au moins 800 px de large) et, si tu veux, `public/images/banniere.jpg` (format 4:1, comme ta bannière LinkedIn). Elles sont détectées au build. Sans photo, des initiales s'affichent ; sans bannière, un bandeau typographique reprend `site.bannerTags`. La photo est utilisée à cinq endroits : version simple (grande, en arche), Parcours, Projets, Freelance et la pastille du destinataire dans Mail.
+Dépose `public/images/photo.webp` (portrait, au moins 800 px de large) et, si tu veux, `public/images/banniere.webp` (format 4:1, comme ta bannière LinkedIn). L'image de partage (`og:image`) est `public/images/og.jpg`, en 1200×630. Elles sont détectées au build. Sans photo, des initiales s'affichent ; sans bannière, un bandeau typographique reprend `site.bannerTags`. La photo est utilisée à cinq endroits : version simple (grande, en arche), Parcours, Projets, Freelance et la pastille du destinataire dans Mail.
 
 ### Vidéo YouTube
 
@@ -236,7 +236,7 @@ Renseigne `site.videoYoutubeId`. La vidéo est intégrée depuis `youtube-nocook
 
 ### Malt
 
-Le profil est un lien (`site.links.malt`). Le widget officiel n'est pas intégré, parce que son format exact n'a pas été vérifié (voir AVANCEMENT.md). S'il s'agit d'un script ou d'une iframe tierce, il faudra **ajouter son domaine à la CSP** dans `astro.config.mjs`.
+Le profil est un lien (`site.links.malt`). Le widget officiel n'est pas intégré, parce que son format exact n'a pas été vérifié. S'il s'agit d'un script ou d'une iframe tierce, il faudra **ajouter son domaine à la CSP** dans `astro.config.mjs`.
 
 ## 8. Sécurité
 
@@ -286,19 +286,20 @@ Pour vérifier une fois en ligne : [securityheaders.com](https://securityheaders
 
 ### CI (`.github/workflows/ci.yml`)
 
-À chaque push et pull request, le workflow enchaîne :
+À chaque pull request, et avant chaque déploiement, le workflow enchaîne :
 
 1. `npm ci`
 2. `npm audit`
 3. `npm run check`
-4. `npm test`
-5. `npm run build`
-6. la vérification des liens internes de `dist/` (lychee, hors ligne)
-7. l'archivage de `dist/`
+4. `npm run format:check`
+5. `npm test`
+6. `npm run build`
+7. la vérification des liens internes de `dist/` (lychee, hors ligne)
+8. l'archivage de `dist/`
 
 ### Déploiement (`.github/workflows/deploy.yml`)
 
-À chaque push sur `main`, le workflow construit le site puis le publie sur Cloudflare Pages avec `wrangler pages deploy`. Il lui faut :
+À chaque push sur `main`, le workflow appelle d'abord la CI : si elle échoue, rien n'est publié. Il publie ensuite sur Cloudflare Pages, avec `wrangler pages deploy`, le `dist/` que la CI vient de valider, puis contrôle la production (HTTP 200 et en-têtes de sécurité). Il lui faut :
 
 | Type          | Nom                     | Contenu                                               |
 | ------------- | ----------------------- | ----------------------------------------------------- |

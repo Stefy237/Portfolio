@@ -18,5 +18,7 @@ const { n, cmd, title, id } = Astro.props;
     <span class="s-head__n">{String(n).padStart(2, '0')}</span>
     <span class="s-head__cmd">$ {cmd}</span>
   </p>
-  <h2 class="s-head__title" id={`${id}-titre`}>{title}</h2>
+  <h2 class="s-head__title" id={`${id}-titre`}>
+    {title}
+  </h2>
 </header>

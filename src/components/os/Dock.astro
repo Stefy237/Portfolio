@@ -16,29 +16,21 @@ const cvHref = ready.cv ? site.documents.cv : null;
 ---
 
 <nav class="dock" id="dock" aria-label="Dock">
-  {
-    dockApps.map((app, i) => (
-      <a
-        class:list={['dock__item', { 'dock__item--secondary': i >= primaryCount }]}
-        href={fallbackHref(app.id)}
-        data-open={app.id}
-      >
-        <Icon name={app.icon} size={24} />
-        {app.label}
-        <span class="dock__dot" aria-hidden="true" />
-      </a>
-    ))
-  }
+  {dockApps.map((app, i) => (
+    <a class:list={['dock__item', { 'dock__item--secondary': i >= primaryCount }]} href={fallbackHref(app.id)} data-open={app.id}>
+      <Icon name={app.icon} size={24} />
+      {app.label}
+      <span class="dock__dot" aria-hidden="true" />
+    </a>
+  ))}
   <span class="dock__sep" aria-hidden="true"></span>
-  {
-    cvHref ? (
-      <a class="btn btn--primary dock__cta" href={cvHref} download>
-        Mon CV
-      </a>
-    ) : (
-      <a class="btn btn--primary dock__cta" href="/simple#dossier" data-open="dossier">
-        Mon CV
-      </a>
-    )
-  }
+  {cvHref ? (
+    <a class="btn btn--primary dock__cta" href={cvHref} download>
+      Mon CV
+    </a>
+  ) : (
+    <a class="btn btn--primary dock__cta" href="/simple#dossier" data-open="dossier">
+      Mon CV
+    </a>
+  )}
 </nav>

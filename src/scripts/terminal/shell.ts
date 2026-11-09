@@ -152,10 +152,7 @@ export function mountTerminal(root: HTMLElement): void {
     const command = 'fastfetch';
     const finish = () => {
       execute(command, false);
-      print([
-        { text: '' },
-        { text: 'Shell de démonstration : tapez « help », ou touchez une commande ci-dessous.', kind: 'muted' },
-      ]);
+      print([{ text: '' }, { text: 'Shell de démonstration : tapez « help », ou touchez une commande ci-dessous.', kind: 'muted' }]);
     };
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
       print([{ text: `${shell.prompt(state.cwd)} ${command}`, kind: 'command' }]);

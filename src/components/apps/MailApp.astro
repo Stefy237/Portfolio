@@ -13,42 +13,46 @@ import Todo from '../ui/Todo.astro';
 <div class="gm" data-mail data-to={site.email}>
   <div class="gm__templates" role="group" aria-label="Modèles de message">
     <span class="gm__templates-label">Modèles :</span>
-    {
-      mailTemplates.map((t) => (
-        <button type="button" class="gm__chip" data-template data-subject={t.subject} data-body={t.body} aria-pressed="false">
-          {t.label}
-        </button>
-      ))
-    }
+    {mailTemplates.map((t) => (
+      <button type="button" class="gm__chip" data-template data-subject={t.subject} data-body={t.body} aria-pressed="false">
+        {t.label}
+      </button>
+    ))}
   </div>
 
   <form class="gm__form" data-mail-form>
     <div class="gm__field">
-      <span class="gm__label" id="gm-to-label">À</span>
-      {
-        site.email ? (
-          <span class="gm__to" aria-labelledby="gm-to-label">
-            <Avatar size={24} class="gm__to-avatar" />
-            <span>{site.name}</span>
-            <span class="gm__to-addr">&lt;{site.email}&gt;</span>
-          </span>
-        ) : (
-          <Todo label="E-mail pro : site.email" />
-        )
-      }
+      <span class="gm__label" id="gm-to-label">
+        À
+      </span>
+      {site.email ? (
+        <span class="gm__to" aria-labelledby="gm-to-label">
+          <Avatar size={24} class="gm__to-avatar" />
+          <span>{site.name}</span>
+          <span class="gm__to-addr">&lt;{site.email}&gt;</span>
+        </span>
+      ) : (
+        <Todo label="E-mail pro : site.email" />
+      )}
       <button type="button" class="gm__icon" data-mail-copy aria-label="Copier l'adresse e-mail" disabled={!site.email}>
         <Icon name="copy" size={17} />
       </button>
     </div>
     <div class="gm__field">
-      <label class="gm__label" for="gm-subject">Objet</label>
+      <label class="gm__label" for="gm-subject">
+        Objet
+      </label>
       <input id="gm-subject" class="gm__input" type="text" data-mail-subject autocomplete="off" />
     </div>
-    <label class="visually-hidden" for="gm-body">Message</label>
+    <label class="visually-hidden" for="gm-body">
+      Message
+    </label>
     <textarea id="gm-body" class="gm__body" data-mail-body placeholder="Bonjour Laura,"></textarea>
 
     <div class="gm__bar">
-      <button type="submit" class="gm__send" disabled={!site.email}>Envoyer</button>
+      <button type="submit" class="gm__send" disabled={!site.email}>
+        Envoyer
+      </button>
       <p class="gm__hint">Ouvre votre messagerie avec ce message prérempli.</p>
       <button type="button" class="gm__icon" data-mail-clear aria-label="Effacer le brouillon">
         <Icon name="trash" size={17} />

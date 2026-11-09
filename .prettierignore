@@ -1,0 +1,4 @@
+public/
+infra/
+package-lock.json
+*.md

@@ -113,7 +113,7 @@ const commands: Record<string, Command> = {
   projets: {
     description: 'mes projets',
     run(ctx) {
-      for (const p of ctx.data.projets) {
+      for (const p of ctx.data.projects) {
         say(ctx, p.name, 'accent');
         say(ctx, `  ${p.summary}`);
       }
@@ -170,7 +170,7 @@ const commands: Record<string, Command> = {
         `Rôle    ${d.title}`,
         `Lieu    ${d.location}`,
         `Statut  ${d.availability}`,
-        `Projets ${d.projets.map((p) => p.name).join(', ')}`,
+        `Projets ${d.projects.map((p) => p.name).join(', ')}`,
         `Shell   démo, aucun accès réel`,
       ];
       // Écran étroit (téléphone) : pas de logo, pour que chaque ligne tienne.
@@ -250,6 +250,34 @@ const commands: Record<string, Command> = {
       say(ctx, 'Pourquoi : open homelab', 'muted');
     },
   },
+  make: {
+    description: 'rejouer le Makefile du homelab',
+    usage: 'make [cible]',
+    run(ctx) {
+      const targets = ctx.data.makeTargets;
+      const goal = ctx.args[0]?.toLowerCase();
+      if (!goal) {
+        say(ctx, 'Cibles du Makefile du homelab :', 'accent');
+        say(ctx, `  ${'all'.padEnd(10)} enchaîne toutes les étapes ci-dessous`);
+        for (const t of targets) say(ctx, `  ${t.name.padEnd(10)} ${t.role}`);
+        say(ctx, `  ${'destroy'.padEnd(10)} supprime tout le cluster`);
+        return;
+      }
+      if (goal === 'destroy') {
+        say(ctx, 'make destroy : refusé. On ne détruit pas une infrastructure depuis un portfolio.', 'error');
+        say(ctx, `Sur le vrai homelab : ${ctx.data.destroyLog.join(' ')}`, 'muted');
+        return;
+      }
+      const selected = goal === 'all' ? targets : targets.filter((t) => t.name === goal);
+      if (selected.length === 0) return say(ctx, `make: *** Aucune règle pour fabriquer la cible « ${goal} ».`, 'error');
+      for (const t of selected) {
+        say(ctx, `make ${t.name} (${t.tool})`, 'accent');
+        say(ctx, `  ${t.role}`);
+        for (const l of t.log) say(ctx, `  ${l}`, 'muted');
+      }
+      say(ctx, 'Extraits de journaux réels : rien n’est exécuté ici.', 'muted');
+    },
+  },
 };
 
 export const commandNames = Object.keys(commands);
@@ -300,6 +328,7 @@ export function createShell(data: TerminalData) {
     const current = endsWithSpace ? '' : tokens[tokens.length - 1]!;
     if (cmd === 'open') return data.apps.map((a) => a.id).filter((id) => id.startsWith(current));
     if (cmd === 'theme') return ['clair', 'sombre'].filter((v) => v.startsWith(current));
+    if (cmd === 'make') return ['all', ...data.makeTargets.map((t) => t.name), 'destroy'].filter((v) => v.startsWith(current));
     if (cmd === 'man') return commandNames.filter((c) => c.startsWith(current));
     if (['cat', 'cd', 'ls'].includes(cmd)) {
       const slash = current.lastIndexOf('/');

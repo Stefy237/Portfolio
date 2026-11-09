@@ -172,7 +172,7 @@ export const apps: AppMeta[] = [
     openOnStart: false,
     flush: false,
     geometry: { x: 410, y: 140, w: 560, h: 460 },
-    publish: ready.recommandations,
+    publish: ready.recommendations,
   },
   {
     id: 'marche',
@@ -184,7 +184,7 @@ export const apps: AppMeta[] = [
     openOnStart: false,
     flush: false,
     geometry: { x: 300, y: 70, w: 760, h: 600 },
-    publish: ready.marche,
+    publish: ready.market,
   },
   {
     id: 'faq',

@@ -1,5 +1,5 @@
 ---
-import { phases, services, homelabLinks, recordings } from '../../data/homelab';
+import { phases, services, makeTargets, homelabLinks, recordings } from '../../data/homelab';
 import Icon from '../ui/Icon.astro';
 import Todo from '../ui/Todo.astro';
 
@@ -8,89 +8,120 @@ const current = phases.find((p) => p.status === 'en cours');
 
 <div class="app">
   <p class="app-lead">
-    Le homelab est mon terrain d'entraînement DevOps. Vous pouvez explorer un shell de démonstration directement ici,
-    et consulter l'état de mon infrastructure en lecture seule.
+    Le homelab est mon terrain d'entraînement DevOps. Vous pouvez explorer un shell de démonstration directement ici, et consulter l'état de
+    mon infrastructure en lecture seule.
   </p>
 
   <div class="actions">
-    <a class="btn btn--primary" href="/#terminal" data-open="terminal"><Icon name="terminal" size={18} /> Ouvrir le terminal</a>
-    {homelabLinks.status && <a class="btn" href={homelabLinks.status} rel="noopener">Page de statut <Icon name="external" size={14} /></a>}
-    {homelabLinks.grafana && <a class="btn" href={homelabLinks.grafana} rel="noopener">Tableau de bord Grafana <Icon name="external" size={14} /></a>}
+    <a class="btn btn--primary" href="/#terminal" data-open="terminal">
+      <Icon name="terminal" size={18} /> Ouvrir le terminal
+    </a>
+    {homelabLinks.status && (
+      <a class="btn" href={homelabLinks.status} rel="noopener">
+        Page de statut <Icon name="external" size={14} />
+      </a>
+    )}
+    {homelabLinks.grafana && (
+      <a class="btn" href={homelabLinks.grafana} rel="noopener">
+        Tableau de bord Grafana <Icon name="external" size={14} />
+      </a>
+    )}
   </div>
+
+  <section class="app-block">
+    <h3>De zéro au cluster en une commande</h3>
+    <p>
+      Tout le cluster est décrit en code. <span class="mono">make all</span> enchaîne ces quatre étapes et{' '}
+      <span class="mono">make destroy</span> efface tout pour repartir de zéro. Tapez <span class="mono">make all</span> dans le terminal
+      pour voir des extraits des journaux.
+    </p>
+    <ol class="rows">
+      {makeTargets.map((t) => (
+        <li>
+          <span>
+            <span class="mono">make {t.name}</span> <span class="entry__meta">— {t.role}</span>
+          </span>
+          <span class="pill">{t.tool}</span>
+        </li>
+      ))}
+    </ol>
+  </section>
 
   <section class="app-block">
     <h3>Feuille de route{current && ` · ${current.name} en cours`}</h3>
     <ul class="rows">
-      {
-        phases.map((p) => (
-          <li>
-            <span>
-              <b>{p.name}</b>
-              {p.content ? ` — ${p.content}` : <Todo label="contenu de la phase" />}
-            </span>
-            <span class:list={['pill', { 'pill--warn': p.status === 'en cours', 'pill--accent': p.status === 'terminée' }]}>{p.status}</span>
-          </li>
-        ))
-      }
+      {phases.map((p) => (
+        <li>
+          <span>
+            <b>{p.name}</b>
+            {p.content ? ` — ${p.content}` : <Todo label="contenu de la phase" />}
+          </span>
+          <span class:list={['pill', { 'pill--warn': p.status === 'en cours', 'pill--accent': p.status === 'terminée' }]}>{p.status}</span>
+        </li>
+      ))}
     </ul>
   </section>
 
   {(services.length > 0 || import.meta.env.DEV) && (
-  <section class="app-block">
-    <h3>Services</h3>
-    {
-      services.length > 0 ? (
+    <section class="app-block">
+      <h3>Services</h3>
+      {services.length > 0 ? (
         <ul class="rows">
           {services.map((s) => (
             <li>
               <span>
                 <span class="mono">{s.name}</span> <span class="entry__meta">— {s.role}</span>
               </span>
-              <span class:list={['pill', { 'pill--warn': s.status === 'en cours', 'pill--accent': s.status === 'en place' }]}>{s.status}</span>
+              <span class:list={['pill', { 'pill--warn': s.status === 'en cours', 'pill--accent': s.status === 'en place' }]}>
+                {s.status}
+              </span>
             </li>
           ))}
         </ul>
       ) : (
         <Todo label="Liste des services du homelab : src/data/homelab.ts" />
-      )
-    }
-  </section>
+      )}
+    </section>
   )}
 
-  {
-    (recordings.length > 0 || import.meta.env.DEV) && (
-      <section class="app-block">
-        <h3>Sessions enregistrées</h3>
-        {recordings.length > 0 ? (
-          <ul class="rows">
-            {recordings.map((r) => (
-              <li>
-                <span>
-                  <a href={r.url}>{r.title}</a> — {r.description}
-                </span>
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <Todo label="Enregistrements asciinema (déploiement, retour arrière, incident)" />
-        )}
-      </section>
-    )
-  }
+  {(recordings.length > 0 || import.meta.env.DEV) && (
+    <section class="app-block">
+      <h3>Sessions enregistrées</h3>
+      {recordings.length > 0 ? (
+        <ul class="rows">
+          {recordings.map((r) => (
+            <li>
+              <span>
+                <a href={r.url}>{r.title}</a> — {r.description}
+              </span>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <Todo label="Enregistrements asciinema (déploiement, retour arrière, incident)" />
+      )}
+    </section>
+  )}
 
   <aside class="callout">
     <Icon name="shield" size={26} />
     <div>
       <h3>Pourquoi ce n'est pas mon vrai homelab</h3>
       <p>
-        Donner un shell sur mon infrastructure à n'importe quel visiteur, ce serait ouvrir une porte d'entrée. Le terminal
-        tourne donc entièrement dans votre navigateur, isolé de tout. Pour l'infrastructure réelle, je ne publie que des vues en
-        lecture seule, sans aucun port ouvert chez moi.
+        Donner un shell sur mon infrastructure à n'importe quel visiteur, ce serait ouvrir une porte d'entrée. Le terminal tourne donc
+        entièrement dans votre navigateur, isolé de tout. Pour l'infrastructure réelle, je ne publie que des vues en lecture seule, sans
+        aucun port ouvert chez moi.
       </p>
     </div>
   </aside>
 
   <div class="link-row">
-    {homelabLinks.repo ? <a href={homelabLinks.repo} rel="noopener">Code de l'infrastructure <Icon name="external" size={14} /></a> : <Todo label="Lien vers le dépôt d'infra du homelab" />}
+    {homelabLinks.repo ? (
+      <a href={homelabLinks.repo} rel="noopener">
+        Code de l'infrastructure <Icon name="external" size={14} />
+      </a>
+    ) : (
+      <Todo label="Lien vers le dépôt d'infra du homelab" />
+    )}
   </div>
 </div>

@@ -5,30 +5,32 @@ import Todo from '../ui/Todo.astro';
 ---
 
 <div class="app">
-  <p class="app-lead">Je les prépare en m'appuyant sur mon homelab. Une fois obtenue, chaque certification renvoie vers sa page de vérification officielle.</p>
+  <p class="app-lead">
+    Je les prépare en m'appuyant sur mon homelab. Une fois obtenue, chaque certification renvoie vers sa page de vérification officielle.
+  </p>
   <section class="app-block">
-    {
-      certifications.map((c) => (
-        <article class="entry">
-          <div class="entry__head">
-            <h4 class="entry__title">{c.name}</h4>
-            <span class:list={['pill', c.status === 'obtenue' ? 'pill--accent' : 'pill--warn']}>
-              {c.status === 'obtenue' ? `obtenue${c.obtainedOn ? ` · ${c.obtainedOn}` : ''}` : `en préparation${c.targetDate ? ` · examen visé ${c.targetDate}` : ''}`}
-            </span>
-          </div>
-          <p class="entry__text">
-            {c.issuer} · {c.scope}
-          </p>
-          {c.status === 'en préparation' && !c.targetDate && <Todo label="date d'examen visée" />}
-          {c.verifyUrl && (
-            <span class="link-row">
-              <a href={c.verifyUrl} rel="noopener">
-                Vérifier <Icon name="external" size={13} />
-              </a>
-            </span>
-          )}
-        </article>
-      ))
-    }
+    {certifications.map((c) => (
+      <article class="entry">
+        <div class="entry__head">
+          <h4 class="entry__title">{c.name}</h4>
+          <span class:list={['pill', c.status === 'obtenue' ? 'pill--accent' : 'pill--warn']}>
+            {c.status === 'obtenue'
+              ? `obtenue${c.obtainedOn ? ` · ${c.obtainedOn}` : ''}`
+              : `en préparation${c.targetDate ? ` · examen visé ${c.targetDate}` : ''}`}
+          </span>
+        </div>
+        <p class="entry__text">
+          {c.issuer} · {c.scope}
+        </p>
+        {c.status === 'en préparation' && !c.targetDate && <Todo label="date d'examen visée" />}
+        {c.verifyUrl && (
+          <span class="link-row">
+            <a href={c.verifyUrl} rel="noopener">
+              Vérifier <Icon name="external" size={13} />
+            </a>
+          </span>
+        )}
+      </article>
+    ))}
   </section>
 </div>

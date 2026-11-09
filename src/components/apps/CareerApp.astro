@@ -1,0 +1,204 @@
+---
+/**
+ * Parcours, organisé comme un profil LinkedIn : bannière, photo, titre, encart « à l'écoute »,
+ * puis Infos, Expérience, Formation, Compétences, Activité.
+ * Même structure pour qu'on le reconnaisse immédiatement, mais couleurs du site et aucun logo de LinkedIn.
+ */
+import { site } from '../../config/site';
+import { experiences, formations, skills, skillContextLabel, initials } from '../../data/career';
+import { recommendations } from '../../data/recommendations';
+import { ready } from '../../lib/content';
+import LinkedInPost from '../embeds/LinkedInPost.astro';
+import Avatar from '../ui/Avatar.astro';
+import Icon from '../ui/Icon.astro';
+import Todo from '../ui/Todo.astro';
+
+const current = experiences.find((e) => e.main);
+const school = formations[0];
+---
+
+<div class="li">
+  <div class="li__card li__card--head">
+    {ready.banner ? (
+      <img class="li__banner li__banner--img" src={site.banner} alt="" />
+    ) : (
+      <div class="li__banner" aria-hidden="true">
+        <span class="li__banner-title">Ingénieure DevOps</span>
+        <span class="li__banner-tags">{site.bannerTags}</span>
+      </div>
+    )}
+    <div class="li__head">
+      <Avatar size={136} class="li__avatar" />
+      <div class="li__identity">
+        <div class="li__main">
+          <h3 class="li__name">{site.name}</h3>
+          <p class="li__headline">{site.headline}</p>
+          <p class="li__meta">
+            {site.location} ·{' '}
+            <a href="/simple#contact" data-open="mail">
+              Coordonnées
+            </a>
+          </p>
+          <p class="li__connections">{site.linkedinConnections}</p>
+        </div>
+        <ul class="li__orgs">
+          {current && (
+            <li>
+              <span class="li__logo li__logo--s">{initials(current.org)}</span>
+              {current.org}
+            </li>
+          )}
+          {school && (
+            <li>
+              <span class="li__logo li__logo--s">{initials(school.short)}</span>
+              {school.short}
+            </li>
+          )}
+        </ul>
+      </div>
+      <div class="li__actions">
+        <a class="li__pill li__pill--primary" href="/simple#contact" data-open="mail">
+          Me contacter
+        </a>
+        <a class="li__pill" href="/simple#contact" data-open="dossier">
+          Voir mon CV
+        </a>
+        {site.links.linkedin && (
+          <a class="li__pill" href={site.links.linkedin} rel="me noopener">
+            Profil LinkedIn <Icon name="external" size={13} />
+          </a>
+        )}
+      </div>
+      <div class="li__open">
+        <b>À l'écoute de nouvelles opportunités</b>
+        <span>CDI · {site.mobility || 'France'}</span>
+        <span class="li__open-sub">{site.availability}</span>
+      </div>
+    </div>
+  </div>
+
+  <section class="li__card" aria-labelledby="li-infos">
+    <h3 class="li__section-title" id="li-infos">
+      Infos
+    </h3>
+    <p class="li__text">{site.intro}</p>
+    {site.lookingFor && <p class="li__text">{site.lookingFor}</p>}
+  </section>
+
+  {(ready.linkedinPost || import.meta.env.DEV) && (
+    <section class="li__card" aria-labelledby="li-activite">
+      <h3 class="li__section-title" id="li-activite">
+        Activité
+      </h3>
+      <LinkedInPost />
+    </section>
+  )}
+
+  <section class="li__card" aria-labelledby="li-xp">
+    <h3 class="li__section-title" id="li-xp">
+      Expérience
+    </h3>
+    <ul class="li__list">
+      {experiences.map((xp) => (
+        <li class="li__item">
+          <span class="li__logo" aria-hidden="true">
+            {initials(xp.org)}
+          </span>
+          <div class="li__item-body">
+            <h4 class="li__item-title">{xp.role}</h4>
+            <p class="li__item-org">
+              {xp.org} · {xp.type}
+            </p>
+            <p class="li__item-meta">{xp.period ?? <Todo label="période" />}</p>
+            <p class="li__item-meta">{xp.place}</p>
+            {xp.summary && <p class="li__text">{xp.summary}</p>}
+            {xp.highlights.length > 0 && (
+              <ul class="li__bullets">
+                {xp.highlights.map((h) => (
+                  <li>{h}</li>
+                ))}
+              </ul>
+            )}
+            {xp.main && xp.highlights.length === 0 && (
+              <Todo label="Réalisations concrètes (dans la limite de ce qui est public) : highlights" />
+            )}
+            {xp.skills.length > 0 && (
+              <p class="li__item-skills">
+                <b>Compétences :</b> {xp.skills.join(' · ')}
+              </p>
+            )}
+          </div>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <section class="li__card" aria-labelledby="li-formation">
+    <h3 class="li__section-title" id="li-formation">
+      Formation
+    </h3>
+    <ul class="li__list">
+      {formations.map((f) => (
+        <li class="li__item">
+          <span class="li__logo" aria-hidden="true">
+            {initials(f.short)}
+          </span>
+          <div class="li__item-body">
+            <h4 class="li__item-title">{f.school}</h4>
+            <p class="li__item-org">
+              {f.degree}, {f.detail}
+            </p>
+            <p class="li__item-meta">{f.period}</p>
+          </div>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <section class="li__card" aria-labelledby="li-skills">
+    <h3 class="li__section-title" id="li-skills">
+      Compétences
+    </h3>
+    <ul class="li__skills">
+      {skills.map((s) => (
+        <li>
+          <span class="li__skill-name">{s.name}</span>
+          {s.context ? <span class="li__item-meta">{skillContextLabel[s.context]}</span> : <Todo label="contexte" />}
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  {recommendations.length > 0 && (
+    <section class="li__card" aria-labelledby="li-reco">
+      <h3 class="li__section-title" id="li-reco">
+        Recommandations
+      </h3>
+      {recommendations.slice(0, 2).map((r) => (
+        <figure class="li__reco">
+          <figcaption>
+            <b>{r.author}</b>
+            <span class="li__item-meta">
+              {r.role} · {r.relation}
+            </span>
+          </figcaption>
+          <blockquote>{r.quote}</blockquote>
+        </figure>
+      ))}
+      <a href="/simple#recommandations" data-open="recommandations">
+        Toutes les recommandations →
+      </a>
+    </section>
+  )}
+
+  <p class="li__footer">
+    Aperçu de mon profil, mis à jour manuellement.
+    {site.links.linkedin ? (
+      <a href={site.links.linkedin} rel="me noopener">
+        Voir le profil complet sur LinkedIn <Icon name="external" size={13} />
+      </a>
+    ) : (
+      <Todo label="URL LinkedIn : site.links.linkedin" />
+    )}
+  </p>
+</div>

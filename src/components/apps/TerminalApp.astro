@@ -4,8 +4,9 @@
  * au build ; le script les lit et interprète les commandes localement, dans le navigateur.
  */
 import { site } from '../../config/site';
-import { projets } from '../../data/projets';
+import { projects } from '../../data/projects';
 import { certifications } from '../../data/certifications';
+import { destroyLog, makeTargets } from '../../data/homelab';
 import { ready } from '../../lib/content';
 import type { AppMeta } from '../../apps/registry';
 import type { TerminalData } from '../../scripts/terminal/types';
@@ -26,7 +27,7 @@ const data: TerminalData = {
   osName: site.osName,
   links: { github: site.links.github, linkedin: site.links.linkedin, malt: site.links.malt },
   cv: ready.cv ? site.documents.cv : null,
-  projets: projets.map((p) => ({
+  projects: projects.map((p) => ({
     slug: p.slug,
     name: p.name,
     summary: p.summary,
@@ -40,6 +41,8 @@ const data: TerminalData = {
   })),
   certifications: certifications.map((c) => ({ name: c.name, status: c.status, targetDate: c.targetDate })),
   apps: apps.filter((a) => a.id !== 'terminal').map((a) => ({ id: a.id, label: a.label })),
+  makeTargets,
+  destroyLog,
 };
 
 // Empêche toute fermeture prématurée de la balise <script> par le contenu.
@@ -49,7 +52,9 @@ const json = JSON.stringify(data).replace(/</g, '\\u003c');
 <div class="term" data-terminal>
   <div class="term__output" data-term-output role="log" aria-live="polite" aria-label="Sortie du terminal"></div>
   <form class="term__line" data-term-form>
-    <label class="term__prompt" for="term-input" data-term-prompt>laura@laura-os:~$</label>
+    <label class="term__prompt" for="term-input" data-term-prompt>
+      laura@laura-os:~$
+    </label>
     <input
       id="term-input"
       class="term__input"
@@ -62,14 +67,29 @@ const json = JSON.stringify(data).replace(/</g, '\\u003c');
       aria-describedby="term-help"
     />
   </form>
-  <p id="term-help" class="visually-hidden">Tapez help pour la liste des commandes. Tab complète la saisie, flèches haut et bas pour l'historique.</p>
+  <p id="term-help" class="visually-hidden">
+    Tapez help pour la liste des commandes. Tab complète la saisie, flèches haut et bas pour l'historique.
+  </p>
   <div class="term__chips" aria-label="Commandes rapides">
     <span class="term__chips-label">Essayez :</span>
-    <button type="button" data-cmd="whoami">whoami</button>
-    <button type="button" data-cmd="projets">projets</button>
-    <button type="button" data-cmd="open parcours">open parcours</button>
-    <button type="button" data-cmd="contact">contact</button>
-    <button type="button" data-cmd="help">help</button>
+    <button type="button" data-cmd="whoami">
+      whoami
+    </button>
+    <button type="button" data-cmd="projets">
+      projets
+    </button>
+    <button type="button" data-cmd="open parcours">
+      open parcours
+    </button>
+    <button type="button" data-cmd="make all">
+      make all
+    </button>
+    <button type="button" data-cmd="contact">
+      contact
+    </button>
+    <button type="button" data-cmd="help">
+      help
+    </button>
   </div>
   <script type="application/json" data-terminal-data set:html={json} />
 </div>
@@ -148,7 +168,7 @@ const json = JSON.stringify(data).replace(/</g, '\\u003c');
     align-items: center;
     gap: 6px;
     padding: 8px 12px 10px;
-    border-top: 1px solid #222a35;
+    border-top: 1px solid var(--term-line);
   }
   .term__chips-label {
     font-size: 12px;
@@ -158,9 +178,9 @@ const json = JSON.stringify(data).replace(/</g, '\\u003c');
   .term__chips button {
     min-height: 32px;
     padding: 4px 10px;
-    border: 1px solid #2f3a47;
+    border: 1px solid var(--term-chip-border);
     border-radius: 7px;
-    background: #161b22;
+    background: var(--term-chip-bg);
     color: var(--term-text);
     font-family: var(--font-mono);
     font-size: 12px;

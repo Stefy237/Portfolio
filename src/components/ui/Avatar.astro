@@ -18,12 +18,10 @@ const initials = site.name
   .join('');
 ---
 
-{
-  ready.photo ? (
-    <img class:list={['avatar-img', className]} src={site.photo} alt={`Portrait de ${site.firstName}`} width={size} height={size} />
-  ) : (
-    <span class:list={['avatar-img avatar-img--initials', className]} aria-hidden="true">
-      {initials}
-    </span>
-  )
-}
+{ready.photo ? (
+  <img class:list={['avatar-img', className]} src={site.photo} alt={`Portrait de ${site.firstName}`} width={size} height={size} />
+) : (
+  <span class:list={['avatar-img avatar-img--initials', className]} aria-hidden="true">
+    {initials}
+  </span>
+)}

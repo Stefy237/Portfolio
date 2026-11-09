@@ -15,13 +15,11 @@ const { label, block = false } = Astro.props;
 const show = import.meta.env.DEV;
 ---
 
-{
-  show && (
-    <span class:list={['todo', { 'todo--block': block }]} title="Visible uniquement en développement">
-      <span class="todo__tag">À compléter</span> {label}
-    </span>
-  )
-}
+{show && (
+  <span class:list={['todo', { 'todo--block': block }]} title="Visible uniquement en développement">
+    <span class="todo__tag">À compléter</span> {label}
+  </span>
+)}
 
 <style>
   .todo {

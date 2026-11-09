@@ -8,17 +8,15 @@ import { ready } from '../../lib/content';
 import Todo from '../ui/Todo.astro';
 ---
 
-{
-  ready.linkedinPost ? (
-    <iframe
-      class="embed embed--linkedin"
-      src={site.linkedinPostEmbedUrl}
-      title="Publication LinkedIn de Laura"
-      loading="lazy"
-      referrerpolicy="strict-origin-when-cross-origin"
-      allowfullscreen
-    />
-  ) : (
-    <Todo block label="Post LinkedIn intégré : renseigne linkedinPostEmbedUrl dans src/config/site.ts" />
-  )
-}
+{ready.linkedinPost ? (
+  <iframe
+    class="embed embed--linkedin"
+    src={site.linkedinPostEmbedUrl}
+    title="Publication LinkedIn de Laura"
+    loading="lazy"
+    referrerpolicy="strict-origin-when-cross-origin"
+    allowfullscreen
+  />
+) : (
+  <Todo block label="Post LinkedIn intégré : renseigne linkedinPostEmbedUrl dans src/config/site.ts" />
+)}

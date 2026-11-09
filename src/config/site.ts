@@ -40,11 +40,8 @@ export const site = {
 
   links: {
     github: 'https://github.com/Stefy237',
-    /** URL complète du profil LinkedIn. */
     linkedin: 'https://www.linkedin.com/in/laura-nguegang-ab0a2b266/',
-    /** URL complète du profil Malt. */
     malt: 'https://www.malt.fr/profile/lauranguegang',
-    /** Dépôt GitHub du code de ce site (lien « code du site »). */
     siteRepo: 'https://github.com/Stefy237/Portfolio',
   },
 

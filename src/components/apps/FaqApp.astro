@@ -8,13 +8,17 @@ const items = faq.filter((q) => import.meta.env.DEV || q.answer.trim() !== '');
 <div class="app">
   <p class="muted">Mes réponses aux questions qu'on me pose souvent, pour gagner du temps avant l'entretien.</p>
   <div>
-    {
-      items.map((q, i) => (
-        <details class="qa" open={i === 0}>
-          <summary>{q.question}</summary>
-          {q.answer ? <p>{q.answer}</p> : <p><Todo label="ta réponse" /></p>}
-        </details>
-      ))
-    }
+    {items.map((q, i) => (
+      <details class="qa" open={i === 0}>
+        <summary>{q.question}</summary>
+        {q.answer ? (
+          <p>{q.answer}</p>
+        ) : (
+          <p>
+            <Todo label="ta réponse" />
+          </p>
+        )}
+      </details>
+    ))}
   </div>
 </div>

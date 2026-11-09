@@ -13,7 +13,7 @@
 
 const MOBILE = window.matchMedia('(max-width: 767px)');
 const MARGIN = 8;
-const MENUBAR = 36;
+const MENUBAR = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--menubar-h'), 10);
 const DOCK_SPACE = 104;
 /** Sur téléphone, décalage maximal (en crans) de la pile de fenêtres. */
 const MAX_CASCADE = 3;
@@ -210,9 +210,7 @@ export function initWindowManager(): void {
         closeWindow(win.id);
       }
     });
-    el.querySelectorAll<HTMLElement>('[data-action="close"]').forEach((b) =>
-      b.addEventListener('click', () => closeWindow(win.id)),
-    );
+    el.querySelectorAll<HTMLElement>('[data-action="close"]').forEach((b) => b.addEventListener('click', () => closeWindow(win.id)));
     el.querySelector<HTMLElement>('[data-action="maximize"]')?.addEventListener('click', () => toggleMaximize(win));
     enableDrag(win);
   });

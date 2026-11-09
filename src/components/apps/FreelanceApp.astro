@@ -19,35 +19,44 @@ const euro = new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR'
       <h3 class="malt__name">{site.name}</h3>
       <p class="malt__title">{freelance.headline}</p>
       <p class="malt__meta">
-        <span><Icon name="map" size={15} /> {site.location}</span>
-        {freelance.availability ? <span class="malt__avail"><span class="status-dot" aria-hidden="true"></span>{freelance.availability}</span> : <Todo label="disponibilité freelance" />}
+        <span>
+          <Icon name="map" size={15} /> {site.location}
+        </span>
+        {freelance.availability ? (
+          <span class="malt__avail">
+            <span class="status-dot" aria-hidden="true"></span>
+            {freelance.availability}
+          </span>
+        ) : (
+          <Todo label="disponibilité freelance" />
+        )}
       </p>
     </div>
     <div class="malt__rate">
-      {
-        freelance.dailyRate ? (
-          <>
-            <span class="malt__rate-label">Tarif indicatif</span>
-            <span class="malt__rate-value">{euro.format(freelance.dailyRate)} <small>/ jour</small></span>
-          </>
-        ) : (
-          <Todo label="TJM : dailyRate" />
-        )
-      }
+      {freelance.dailyRate ? (
+        <>
+          <span class="malt__rate-label">Tarif indicatif</span>
+          <span class="malt__rate-value">
+            {euro.format(freelance.dailyRate)} <small>/ jour</small>
+          </span>
+        </>
+      ) : (
+        <Todo label="TJM : dailyRate" />
+      )}
     </div>
   </header>
 
   <div class="malt__cta">
-    {
-      site.links.malt ? (
-        <a class="malt__btn malt__btn--primary" href={site.links.malt} rel="noopener">
-          Proposer un projet sur Malt <Icon name="external" size={15} />
-        </a>
-      ) : (
-        <Todo label="URL Malt : site.links.malt" />
-      )
-    }
-    <a class="malt__btn" href="/simple#contact" data-open="mail">Envoyer un message</a>
+    {site.links.malt ? (
+      <a class="malt__btn malt__btn--primary" href={site.links.malt} rel="noopener">
+        Proposer un projet sur Malt <Icon name="external" size={15} />
+      </a>
+    ) : (
+      <Todo label="URL Malt : site.links.malt" />
+    )}
+    <a class="malt__btn" href="/simple#contact" data-open="mail">
+      Envoyer un message
+    </a>
   </div>
   <p class="malt__note">{freelance.note}</p>
 
@@ -56,48 +65,42 @@ const euro = new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR'
     <p>{freelance.pitch}</p>
   </section>
 
-  {
-    (freelance.services.length > 0 || import.meta.env.DEV) && (
-      <section class="malt__section" aria-labelledby="malt-services">
-        <h3 id="malt-services">Prestations</h3>
-        {freelance.services.length > 0 ? (
-          <ul class="malt__services">
-            {freelance.services.map((s) => (
-              <li>{s}</li>
-            ))}
-          </ul>
-        ) : (
-          <Todo label="Prestations : src/data/freelance.ts" />
-        )}
-      </section>
-    )
-  }
+  {(freelance.services.length > 0 || import.meta.env.DEV) && (
+    <section class="malt__section" aria-labelledby="malt-services">
+      <h3 id="malt-services">Prestations</h3>
+      {freelance.services.length > 0 ? (
+        <ul class="malt__services">
+          {freelance.services.map((s) => (
+            <li>{s}</li>
+          ))}
+        </ul>
+      ) : (
+        <Todo label="Prestations : src/data/freelance.ts" />
+      )}
+    </section>
+  )}
 
-  {
-    (freelance.skills.length > 0 || import.meta.env.DEV) && (
-      <section class="malt__section" aria-labelledby="malt-skills">
-        <h3 id="malt-skills">Compétences</h3>
-        {freelance.skills.length > 0 ? (
-          <ul class="malt__skills">
-            {freelance.skills.map((s) => (
-              <li>{s}</li>
-            ))}
-          </ul>
-        ) : (
-          <Todo label="Compétences freelance : skills" />
-        )}
-      </section>
-    )
-  }
+  {(freelance.skills.length > 0 || import.meta.env.DEV) && (
+    <section class="malt__section" aria-labelledby="malt-skills">
+      <h3 id="malt-skills">Compétences</h3>
+      {freelance.skills.length > 0 ? (
+        <ul class="malt__skills">
+          {freelance.skills.map((s) => (
+            <li>{s}</li>
+          ))}
+        </ul>
+      ) : (
+        <Todo label="Compétences freelance : skills" />
+      )}
+    </section>
+  )}
 
-  {
-    freelance.example && (
-      <section class="malt__section" aria-labelledby="malt-portfolio">
-        <h3 id="malt-portfolio">Portfolio</h3>
-        <a href={freelance.example} rel="noopener">
-          Voir un exemple avant / après <Icon name="external" size={13} />
-        </a>
-      </section>
-    )
-  }
+  {freelance.example && (
+    <section class="malt__section" aria-labelledby="malt-portfolio">
+      <h3 id="malt-portfolio">Portfolio</h3>
+      <a href={freelance.example} rel="noopener">
+        Voir un exemple avant / après <Icon name="external" size={13} />
+      </a>
+    </section>
+  )}
 </div>

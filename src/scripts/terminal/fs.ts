@@ -11,12 +11,12 @@ const file = (content: string): FsNode => ({ type: 'file', content });
 const dir = (children: Record<string, FsNode>): FsNode => ({ type: 'dir', children });
 
 export function buildFs(d: TerminalData): FsNode {
-  const projets: Record<string, FsNode> = {};
-  for (const p of d.projets) {
+  const projects: Record<string, FsNode> = {};
+  for (const p of d.projects) {
     const lines = [`# ${p.name}`, '', p.description];
     if (p.stack.length) lines.push('', `Stack : ${p.stack.join(', ')}`);
     for (const l of p.links) lines.push(`${l.label} : ${l.url}`);
-    projets[`${p.slug}.md`] = file(lines.join('\n'));
+    projects[`${p.slug}.md`] = file(lines.join('\n'));
   }
 
   const contact = [
@@ -55,7 +55,7 @@ export function buildFs(d: TerminalData): FsNode {
         'visite.md': file(visite),
         'contact.txt': file(contact),
         'certifications.txt': file(certifs),
-        projets: dir(projets),
+        projets: dir(projects),
       }),
     }),
     etc: dir({

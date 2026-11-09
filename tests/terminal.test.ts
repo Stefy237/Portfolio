@@ -13,14 +13,17 @@ const data: TerminalData = {
   osName: 'laura·os',
   links: { github: 'https://github.com/Stefy237', linkedin: '', malt: '' },
   cv: null,
-  projets: [
-    { slug: 'mysh', name: 'Mysh', summary: 'Configurateur de shell', description: 'Description', stack: [], links: [] },
-  ],
+  projects: [{ slug: 'mysh', name: 'Mysh', summary: 'Configurateur de shell', description: 'Description', stack: [], links: [] }],
   certifications: [{ name: 'Terraform Associate', status: 'en préparation', targetDate: null }],
   apps: [
     { id: 'projets', label: 'Projets' },
     { id: 'homelab', label: 'Homelab' },
   ],
+  makeTargets: [
+    { name: 'infra', tool: 'Terraform', role: 'crée les VM', log: ['Apply complete!'] },
+    { name: 'test', tool: 'Smoke test', role: 'vérifie le cluster', log: [] },
+  ],
+  destroyLog: ['Destroy complete!'],
 };
 
 const fresh = (): ShellState => ({ cwd: HOME, history: [] });
@@ -112,5 +115,33 @@ describe('commandes', () => {
 
   it('affiche une invite avec le dossier courant', () => {
     expect(shell.prompt(`${HOME}/projets`)).toBe('laura@laura-os:~/projets$');
+  });
+});
+
+describe('make', () => {
+  const shell = createShell(data);
+
+  it('liste les cibles sans argument', () => {
+    const out = texts(shell.run('make', fresh()).lines);
+    expect(out).toContain('infra');
+    expect(out).toContain('destroy');
+  });
+
+  it('rejoue toutes les étapes avec make all', () => {
+    const out = texts(shell.run('make all', fresh()).lines);
+    expect(out).toContain('make infra (Terraform)');
+    expect(out).toContain('Apply complete!');
+    expect(out).toContain('make test (Smoke test)');
+  });
+
+  it('refuse make destroy et signale une cible inconnue', () => {
+    const destroy = shell.run('make destroy', fresh()).lines;
+    expect(destroy[0]?.kind).toBe('error');
+    expect(texts(destroy)).toContain('Destroy complete!');
+    expect(shell.run('make deploy', fresh()).lines[0]?.kind).toBe('error');
+  });
+
+  it('complète les cibles', () => {
+    expect(shell.complete('make de', fresh())).toEqual(['destroy']);
   });
 });

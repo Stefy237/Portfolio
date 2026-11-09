@@ -1,15 +1,21 @@
-# laura·os — portfolio Personnel
+# laura·os
 
-Portfolio personnel présenté comme un **bureau de système d'exploitation dans le navigateur**. Les projets, le parcours, le homelab, les certifications et le dossier de candidature s'ouvrent dans des fenêtres. Un terminal, ouvert au démarrage, permet d'explorer le site en ligne de commande.
+[![Déploiement](https://github.com/Stefy237/Portfolio/actions/workflows/deploy.yml/badge.svg?branch=main)](https://github.com/Stefy237/Portfolio/actions/workflows/deploy.yml)
+
+**Site en ligne : [laura-nguegang.pages.dev](https://laura-nguegang.pages.dev)**
+
+![Le bureau laura·os, avec le terminal ouvert](docs/screenshot.png)
+
+Portfolio personnel présenté comme un **bureau de système d'exploitation dans le navigateur**. Les projets, le parcours, le homelab, les certifications et le dossier de candidature s'ouvrent dans des fenêtres. Un terminal, ouvert au démarrage sur ordinateur, permet d'explorer le site en ligne de commande.
 
 - **Des fenêtres qu'on reconnaît tout de suite.** Projets est organisé comme un profil GitHub, Parcours comme un profil LinkedIn, Freelance comme un profil Malt et Mail comme un « Nouveau message » de webmail. La structure est la même, mais avec les couleurs du site et sans logo de ces services.
 
 - **Thème clair et sombre** : il suit le réglage du système, et un bouton permet de basculer.
-- **Sur téléphone**, le terminal s'ouvre en plein écran au démarrage. Le bouton « Accueil » mène à l'écran d'applications.
+- **Sur téléphone**, le bureau devient un écran d'accueil et les fenêtres gardent leur cadre.
 - **Une version simple** (`/simple`) présente tout le contenu sur une seule page éditoriale, avec photo et sans encadrés. Elle sert aux recruteurs pressés, aux lecteurs d'écran et à l'impression, et fonctionne sans JavaScript.
 - **Site statique** généré par [Astro](https://astro.build), sans framework côté navigateur : le bureau est en TypeScript natif.
 
-> Fonctionnement détaillé du code : **[DOCUMENTATION.md](./DOCUMENTATION.md)**.
+> Fonctionnement détaillé du code : **[DOCUMENTATION.md](./DOCUMENTATION.md)**. Guide pas à pas pour débutant : **[docs/GUIDE.md](./docs/GUIDE.md)**.
 
 ## Démarrage rapide
 
@@ -30,6 +36,7 @@ npm run dev        # http://localhost:4321
 | `npm run build`   | construit le site de production dans `dist/`                   |
 | `npm run preview` | sert `dist/` en local, pour tester le résultat de production   |
 | `npm run check`   | vérifie les types TypeScript et les composants Astro           |
+| `npm run format`  | met le code en forme (Prettier)                                |
 | `npm test`        | lance les tests unitaires (Vitest)                             |
 
 ## Où modifier quoi
@@ -37,13 +44,13 @@ npm run dev        # http://localhost:4321
 | Je veux changer…                                          | Fichier                                   |
 | --------------------------------------------------------- | ----------------------------------------- |
 | Mon nom, mon titre, mes liens, mon e-mail, ma vidéo       | `src/config/site.ts`                      |
-| Mes expériences, ma formation, mes compétences            | `src/data/parcours.ts`                    |
-| Mes projets                                               | `src/data/projets.ts`                     |
+| Mes expériences, ma formation, mes compétences            | `src/data/career.ts`                    |
+| Mes projets                                               | `src/data/projects.ts`                     |
 | Mes certifications                                        | `src/data/certifications.ts`              |
-| Les recommandations                                       | `src/data/recommandations.ts`             |
+| Les recommandations                                       | `src/data/recommendations.ts`             |
 | Mes réponses aux questions d'entretien                    | `src/data/faq.ts`                         |
 | Le homelab (phases, services, liens)                      | `src/data/homelab.ts`                     |
-| Les salaires par région                                   | `src/data/marche.ts`                      |
+| Les salaires par région                                   | `src/data/market.ts`                      |
 | L'offre freelance                                         | `src/data/freelance.ts`                   |
 | Mon CV, ma lettre, ma photo, ma bannière                  | `public/documents/`, `public/images/`     |
 | Les modèles de messages de la fenêtre Mail                | `src/data/mail.ts`                        |
@@ -58,8 +65,8 @@ npm run dev        # http://localhost:4321
 ├── astro.config.mjs          configuration Astro (dont la politique de sécurité CSP)
 ├── public/                   fichiers servis tels quels
 │   ├── _headers              en-têtes HTTP de sécurité (Cloudflare Pages)
-│   ├── documents/            CV et lettre en PDF (à déposer)
-│   ├── images/               photo de profil (à déposer)
+│   ├── documents/            CV et lettre en PDF
+│   ├── images/               photo de profil, bannière
 │   └── scripts/theme-init.js applique le thème avant l'affichage
 ├── src/
 │   ├── config/site.ts        identité, liens, documents
@@ -75,17 +82,23 @@ npm run dev        # http://localhost:4321
 │   ├── scripts/              gestionnaire de fenêtres, thème, terminal, mail
 │   ├── styles/               jetons, bureau, contenu, fenêtres « plateforme », version simple
 │   └── pages/                index (bureau), simple, 404
-├── tests/                    tests unitaires du terminal
+├── tests/                    tests unitaires du terminal et de la fenêtre Mail
+├── docs/                     guide détaillé, capture d'écran
 ├── infra/terraform/          projet Cloudflare Pages + nom de domaine + DNS
 └── .github/                  CI, déploiement, Dependabot
 ```
 
 ## Mise en ligne
 
-Le site est conçu pour **Cloudflare Pages**. Ce choix permet les en-têtes de sécurité HTTP (`public/_headers`), ce que GitHub Pages ne permet pas, et la gestion du nom de domaine par Terraform.
+À chaque push sur `main`, GitHub Actions vérifie le code (types, mise en forme, tests, audit des dépendances, liens internes), construit le site, publie sur **Cloudflare Pages** le build validé, puis contrôle la production. Si une vérification échoue, rien n'est publié.
 
-À chaque push sur `main`, GitHub Actions vérifie le code, construit le site et le publie.
+## Choix techniques
+
+- **Astro, sans framework côté navigateur.** Le contenu est statique : tout est généré au build, et seul le bureau a besoin d'un peu de TypeScript.
+- **Cloudflare Pages plutôt que GitHub Pages.** Il permet de définir de vrais en-têtes HTTP de sécurité (`public/_headers`), en complément de la CSP à empreintes générée par Astro.
+- **Terraform pour l'hébergement.** Le projet Pages et l'éventuel nom de domaine sont décrits dans `infra/terraform/`. Le fournisseur Cloudflare reste en 4.x, car la 5.x renomme plusieurs ressources.
+- **État Terraform local, assumé.** Une seule personne administre ce projet ; un backend distant deviendrait utile en travaillant à plusieurs.
 
 ## Licence
 
-Code : à définir. Contenu (textes, CV, photo) : © Laura Nguegang Kowo, tous droits réservés.
+Code sous licence [MIT](./LICENSE). Contenu (textes, CV, photo) : © Laura Nguegang Kowo, tous droits réservés.

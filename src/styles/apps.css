@@ -86,10 +86,6 @@
 .rows li:first-child {
   border-top: none;
 }
-.rows .entry__meta {
-  white-space: nowrap;
-}
-
 /* Compétences */
 .skills {
   list-style: none;

@@ -42,6 +42,9 @@
   --term-prompt: #5eead4;
   --term-error: #ff8e8e;
   --term-accent: #f5c46b;
+  --term-line: #222a35;
+  --term-chip-border: #2f3a47;
+  --term-chip-bg: #161b22;
 
   /* Graphe de contributions (5 niveaux) */
   --contrib-0: #e2e5df;

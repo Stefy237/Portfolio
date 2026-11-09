@@ -99,8 +99,10 @@ body.os {
 
 .desktop__watermark {
   position: absolute;
-  right: 56px;
-  bottom: 120px;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  white-space: nowrap;
   font-family: var(--font-display);
   font-size: clamp(64px, 9vw, 132px);
   font-weight: 700;
@@ -157,7 +159,6 @@ body.os {
   border: 1px solid var(--border);
   color: var(--text-2);
 }
-
 
 .note {
   position: absolute;

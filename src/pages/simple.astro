@@ -11,14 +11,14 @@ import SectionHeading from '../components/simple/SectionHeading.astro';
 import Icon from '../components/ui/Icon.astro';
 import Todo from '../components/ui/Todo.astro';
 import { site } from '../config/site';
-import { experiences, formations, skills } from '../data/parcours';
-import { projets } from '../data/projets';
+import { experiences, formations, skills } from '../data/career';
+import { projects } from '../data/projects';
 import { certifications } from '../data/certifications';
-import { recommandations } from '../data/recommandations';
+import { recommendations } from '../data/recommendations';
 import { phases, homelabLinks } from '../data/homelab';
 import { freelance } from '../data/freelance';
 import { faq } from '../data/faq';
-import { regions, methodology, homeRegion } from '../data/marche';
+import { regions, methodology, homeRegion } from '../data/market';
 import { ready } from '../lib/content';
 import '../styles/simple.css';
 
@@ -32,17 +32,23 @@ const next = () => ++counter;
 ---
 
 <Base title={`${site.name} — ${site.title}`} bodyClass="simple">
-  <a class="skip-link" href="#contenu">Aller au contenu</a>
+  <a class="skip-link" href="#contenu">
+    Aller au contenu
+  </a>
 
   <header class="s-bar">
-    <a class="s-bar__brand" href="/" aria-label={`Ouvrir le bureau ${site.osName}`}>laura<b>·os</b></a>
+    <a class="s-bar__brand" href="/" aria-label={`Ouvrir le bureau ${site.osName}`}>
+      laura<b>·os</b>
+    </a>
     <nav class="s-bar__nav" aria-label="Sections">
       <a href="#parcours">Parcours</a>
       <a href="#projets">Projets</a>
       <a href="#homelab">Homelab</a>
       <a href="#contact">Contact</a>
     </nav>
-    <a class="s-bar__desk" href="/">Ouvrir le bureau <Icon name="terminal" size={16} /></a>
+    <a class="s-bar__desk" href="/">
+      Ouvrir le bureau <Icon name="terminal" size={16} />
+    </a>
     <ThemeToggle />
   </header>
 
@@ -50,40 +56,55 @@ const next = () => ++counter;
     <!-- Ouverture -->
     <section class="s-hero" aria-labelledby="s-hero-title">
       <div class="s-hero__text">
-        <p class="s-prompt" aria-hidden="true">laura@laura-os:~$ whoami</p>
-        <h1 id="s-hero-title">Bonjour,<br />je suis {site.firstName}.</h1>
+        <p class="s-prompt" aria-hidden="true">
+          laura@laura-os:~$ whoami
+        </p>
+        <h1 id="s-hero-title">
+          Bonjour,
+          <br />
+          je suis {site.firstName}.
+        </h1>
         <p class="s-hero__role">{site.title}</p>
         <p class="s-hero__intro">{site.intro}</p>
         {site.lookingFor && <p class="s-hero__intro">{site.lookingFor}</p>}
-        <p class="s-status"><span class="status-dot" aria-hidden="true"></span>{site.availability} · {site.location}</p>
+        <p class="s-status">
+          <span class="status-dot" aria-hidden="true"></span>
+          {site.availability} · {site.location}
+        </p>
         <div class="s-actions">
-          {
-            ready.cv ? (
-              <a class="btn btn--primary" href={site.documents.cv} download>
-                <Icon name="download" size={18} /> Télécharger mon CV
-              </a>
-            ) : (
-              <Todo label="CV en PDF" />
-            )
-          }
-          <a class="btn" href="#contact">Me contacter</a>
+          {ready.cv ? (
+            <a class="btn btn--primary" href={site.documents.cv} download>
+              <Icon name="download" size={18} /> Télécharger mon CV
+            </a>
+          ) : (
+            <Todo label="CV en PDF" />
+          )}
+          <a class="btn" href="#contact">
+            Me contacter
+          </a>
           <span class="s-links">
-            {site.links.linkedin && <a href={site.links.linkedin} rel="me noopener">LinkedIn ↗</a>}
-            <a href={site.links.github} rel="me noopener">GitHub ↗</a>
+            {site.links.linkedin && (
+              <a href={site.links.linkedin} rel="me noopener">
+                LinkedIn ↗
+              </a>
+            )}
+            <a href={site.links.github} rel="me noopener">
+              GitHub ↗
+            </a>
           </span>
         </div>
       </div>
       <figure class="s-hero__photo">
         <div class="s-hero__frame">
-          {
-            ready.photo ? (
-              <img src={site.photo} alt={`Portrait de ${site.firstName}`} width="400" height="500" />
-            ) : import.meta.env.DEV ? (
-              <Todo block label={`Photo : public${site.photo}`} />
-            ) : (
-              <span class="s-hero__monogram" aria-hidden="true">LN</span>
-            )
-          }
+          {ready.photo ? (
+            <img src={site.photo} alt={`Portrait de ${site.firstName}`} width="400" height="500" />
+          ) : import.meta.env.DEV ? (
+            <Todo block label={`Photo : public${site.photo}`} />
+          ) : (
+            <span class="s-hero__monogram" aria-hidden="true">
+              LN
+            </span>
+          )}
         </div>
         <figcaption>{site.mobility || site.location}</figcaption>
       </figure>
@@ -91,77 +112,99 @@ const next = () => ++counter;
 
     <!-- Faits marquants -->
     <section class="s-facts" aria-label="En bref">
-      {
-        site.keyFacts.map((f, i) => (
-          <div class="s-fact">
-            <span class="s-fact__n" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
-            <p class="s-fact__title">{f.title}</p>
-            <p class="s-fact__detail">{f.detail}</p>
-          </div>
-        ))
-      }
+      {site.keyFacts.map((f, i) => (
+        <div class="s-fact">
+          <span class="s-fact__n" aria-hidden="true">
+            {String(i + 1).padStart(2, '0')}
+          </span>
+          <p class="s-fact__title">{f.title}</p>
+          <p class="s-fact__detail">{f.detail}</p>
+        </div>
+      ))}
     </section>
 
     <!-- Parcours -->
     <section class="s-section" id="parcours" aria-labelledby="parcours-titre">
       <SectionHeading n={next()} cmd="open parcours" title="Parcours" id="parcours" />
       <ol class="s-timeline">
-        {
-          experiences.map((xp) => (
-            <li class:list={['s-timeline__item', { 'is-main': xp.main }]}>
-              <p class="s-timeline__when">{xp.period ?? <Todo label="période" />}</p>
-              <h3 class="s-timeline__what">
-                {xp.role}, <span>{xp.org}</span>
-              </h3>
-              <p class="s-timeline__where">{xp.type} · {xp.place}</p>
-              {xp.summary && <p class="s-timeline__text">{xp.summary}</p>}
-              {xp.highlights.length > 0 && (
-                <ul class="s-timeline__list">
-                  {xp.highlights.map((h) => <li>{h}</li>)}
-                </ul>
-              )}
-            </li>
-          ))
-        }
-        {
-          formations.map((f) => (
-            <li class="s-timeline__item">
-              <p class="s-timeline__when">{f.period}</p>
-              <h3 class="s-timeline__what">
-                {f.degree}, <span>{f.short}</span>
-              </h3>
-              <p class="s-timeline__where">{f.school} · {f.detail}</p>
-            </li>
-          ))
-        }
+        {experiences.map((xp) => (
+          <li class:list={['s-timeline__item', { 'is-main': xp.main }]}>
+            <p class="s-timeline__when">{xp.period ?? <Todo label="période" />}</p>
+            <h3 class="s-timeline__what">
+              {xp.role}, <span>{xp.org}</span>
+            </h3>
+            <p class="s-timeline__where">
+              {xp.type} · {xp.place}
+            </p>
+            {xp.summary && <p class="s-timeline__text">{xp.summary}</p>}
+            {xp.highlights.length > 0 && (
+              <ul class="s-timeline__list">
+                {xp.highlights.map((h) => (
+                  <li>{h}</li>
+                ))}
+              </ul>
+            )}
+          </li>
+        ))}
+        {formations.map((f) => (
+          <li class="s-timeline__item">
+            <p class="s-timeline__when">{f.period}</p>
+            <h3 class="s-timeline__what">
+              {f.degree}, <span>{f.short}</span>
+            </h3>
+            <p class="s-timeline__where">
+              {f.school} · {f.detail}
+            </p>
+          </li>
+        ))}
       </ol>
-      <p class="s-skills"><span class="s-label">Outils</span> {skills.map((s) => s.name).join(' · ')}</p>
-      {site.links.linkedin && <a class="s-more" href={site.links.linkedin} rel="me noopener">Le profil complet sur LinkedIn ↗</a>}
+      <p class="s-skills">
+        <span class="s-label">Outils</span> {skills.map((s) => s.name).join(' · ')}
+      </p>
+      {site.links.linkedin && (
+        <a class="s-more" href={site.links.linkedin} rel="me noopener">
+          Le profil complet sur LinkedIn ↗
+        </a>
+      )}
     </section>
 
     <!-- Projets -->
     <section class="s-section" id="projets" aria-labelledby="projets-titre">
       <SectionHeading n={next()} cmd="open projets" title="Ce que j'ai construit" id="projets" />
       <ol class="s-projects">
-        {
-          projets.map((p, i) => (
-            <li class:list={['s-project', { 'is-featured': p.featured }]}>
-              <span class="s-project__n" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
-              <div class="s-project__body">
-                <h3 class="s-project__name">{p.name}</h3>
-                <p class="s-project__text">{p.featured ? p.description : p.summary}</p>
-                {p.stack.length > 0 && <p class="s-project__stack">{p.stack.join(' · ')}</p>}
-                <p class="s-project__links">
-                  {p.prod && <a href={p.prod} rel="noopener">Site en production ↗</a>}
-                  {p.demo && <a href={p.demo} rel="noopener">Démo ↗</a>}
-                  {p.repo && <a href={`https://github.com/${p.repo}`} rel="noopener">Code ↗</a>}
-                </p>
-              </div>
-            </li>
-          ))
-        }
+        {projects.map((p, i) => (
+          <li class:list={['s-project', { 'is-featured': p.featured }]}>
+            <span class="s-project__n" aria-hidden="true">
+              {String(i + 1).padStart(2, '0')}
+            </span>
+            <div class="s-project__body">
+              <h3 class="s-project__name">{p.name}</h3>
+              <p class="s-project__text">{p.featured ? p.description : p.summary}</p>
+              {p.stack.length > 0 && <p class="s-project__stack">{p.stack.join(' · ')}</p>}
+              <p class="s-project__links">
+                {p.prod && (
+                  <a href={p.prod} rel="noopener">
+                    Site en production ↗
+                  </a>
+                )}
+                {p.demo && (
+                  <a href={p.demo} rel="noopener">
+                    Démo ↗
+                  </a>
+                )}
+                {p.repo && (
+                  <a href={`https://github.com/${p.repo}`} rel="noopener">
+                    Code ↗
+                  </a>
+                )}
+              </p>
+            </div>
+          </li>
+        ))}
       </ol>
-      <a class="s-more" href={site.links.github} rel="me noopener">Tous mes dépôts sur GitHub ↗</a>
+      <a class="s-more" href={site.links.github} rel="me noopener">
+        Tous mes dépôts sur GitHub ↗
+      </a>
     </section>
 
     <!-- Homelab : bande sombre, comme un terminal -->
@@ -169,28 +212,32 @@ const next = () => ++counter;
       <div class="s-band__inner">
         <SectionHeading n={next()} cmd="cat ~/homelab.md" title="Le homelab" id="homelab" />
         <p class="s-band__lead">
-          Mon terrain d'entraînement DevOps. Sur le bureau, un shell de démonstration permet de l'explorer directement dans
-          le navigateur.
+          Mon terrain d'entraînement DevOps. Sur le bureau, un shell de démonstration permet de l'explorer directement dans le navigateur.
         </p>
         <ul class="s-band__phases">
-          {
-            phases.map((p) => (
-              <li>
-                <span class:list={['s-band__status', { 'is-current': p.status === 'en cours' }]}>[{p.status}]</span> {p.name}
-                {p.content && ` — ${p.content}`}
-              </li>
-            ))
-          }
+          {phases.map((p) => (
+            <li>
+              <span class:list={['s-band__status', { 'is-current': p.status === 'en cours' }]}>[{p.status}]</span> {p.name}
+              {p.content && ` — ${p.content}`}
+            </li>
+          ))}
         </ul>
         <p class="s-band__why">
-          <b>Pourquoi ce n'est pas mon vrai homelab ?</b> Donner un shell sur mon infrastructure à n'importe quel visiteur,
-          ce serait ouvrir une porte d'entrée. Je ne publie donc que des vues en lecture seule, sans aucun port ouvert chez
-          moi.
+          <b>Pourquoi ce n'est pas mon vrai homelab ?</b> Donner un shell sur mon infrastructure à n'importe quel visiteur, ce serait ouvrir
+          une porte d'entrée. Je ne publie donc que des vues en lecture seule, sans aucun port ouvert chez moi.
         </p>
         <p class="s-band__links">
           <a href="/#terminal">Essayer le terminal →</a>
-          {homelabLinks.status && <a href={homelabLinks.status} rel="noopener">Page de statut ↗</a>}
-          {homelabLinks.repo && <a href={homelabLinks.repo} rel="noopener">Code de l'infrastructure ↗</a>}
+          {homelabLinks.status && (
+            <a href={homelabLinks.status} rel="noopener">
+              Page de statut ↗
+            </a>
+          )}
+          {homelabLinks.repo && (
+            <a href={homelabLinks.repo} rel="noopener">
+              Code de l'infrastructure ↗
+            </a>
+          )}
         </p>
       </div>
     </section>
@@ -199,118 +246,161 @@ const next = () => ++counter;
     <section class="s-section" id="certifications" aria-labelledby="certifications-titre">
       <SectionHeading n={next()} cmd="cat certifications.txt" title="Certifications" id="certifications" />
       <ul class="s-certs">
-        {
-          certifications.map((c) => (
-            <li>
-              <span class="s-certs__name">{c.name}</span>
-              <span class="s-certs__issuer">{c.issuer}</span>
-              <span class:list={['s-certs__status', { 'is-done': c.status === 'obtenue' }]}>
-                {c.verifyUrl ? <a href={c.verifyUrl} rel="noopener">{c.status} ↗</a> : c.status}
-                {c.targetDate && c.status !== 'obtenue' && ` · ${c.targetDate}`}
-              </span>
-            </li>
-          ))
-        }
+        {certifications.map((c) => (
+          <li>
+            <span class="s-certs__name">{c.name}</span>
+            <span class="s-certs__issuer">{c.issuer}</span>
+            <span class:list={['s-certs__status', { 'is-done': c.status === 'obtenue' }]}>
+              {c.verifyUrl ? (
+                <a href={c.verifyUrl} rel="noopener">
+                  {c.status} ↗
+                </a>
+              ) : (
+                c.status
+              )}
+              {c.targetDate && c.status !== 'obtenue' && ` · ${c.targetDate}`}
+            </span>
+          </li>
+        ))}
       </ul>
     </section>
 
-    {
-      ready.recommandations && (
-        <section class="s-section" id="recommandations" aria-labelledby="recommandations-titre">
-          <SectionHeading n={next()} cmd="cat recommandations.txt" title="Ils en parlent" id="recommandations" />
-          {recommandations.map((r) => (
-            <figure class="s-quote">
-              <blockquote>« {r.quote} »</blockquote>
-              <figcaption>
-                {r.author}, {r.role} · {r.relation}
-              </figcaption>
-            </figure>
-          ))}
-        </section>
-      )
-    }
+    {ready.recommendations && (
+      <section class="s-section" id="recommandations" aria-labelledby="recommandations-titre">
+        <SectionHeading n={next()} cmd="cat recommandations.txt" title="Ils en parlent" id="recommandations" />
+        {recommendations.map((r) => (
+          <figure class="s-quote">
+            <blockquote>« {r.quote} »</blockquote>
+            <figcaption>
+              {r.author}, {r.role} · {r.relation}
+            </figcaption>
+          </figure>
+        ))}
+      </section>
+    )}
 
-    {
-      ready.video && (
-        <section class="s-section" id="video" aria-labelledby="video-titre">
-          <SectionHeading n={next()} cmd="play presentation.mp4" title="En vidéo" id="video" />
-          <iframe
-            class="s-video"
-            src={`https://www.youtube-nocookie.com/embed/${encodeURIComponent(site.videoYoutubeId)}`}
-            title={`Vidéo de présentation de ${site.firstName}`}
-            loading="lazy"
-            referrerpolicy="strict-origin-when-cross-origin"
-            allow="encrypted-media; picture-in-picture"
-            allowfullscreen
-          />
-        </section>
-      )
-    }
+    {ready.video && (
+      <section class="s-section" id="video" aria-labelledby="video-titre">
+        <SectionHeading n={next()} cmd="play presentation.mp4" title="En vidéo" id="video" />
+        <iframe
+          class="s-video"
+          src={`https://www.youtube-nocookie.com/embed/${encodeURIComponent(site.videoYoutubeId)}`}
+          title={`Vidéo de présentation de ${site.firstName}`}
+          loading="lazy"
+          referrerpolicy="strict-origin-when-cross-origin"
+          allow="encrypted-media; picture-in-picture"
+          allowfullscreen
+        />
+      </section>
+    )}
 
     <section class="s-section s-section--narrow" id="freelance" aria-labelledby="freelance-titre">
       <SectionHeading n={next()} cmd="open freelance" title="En parallèle : le freelance" id="freelance" />
-      <p class="s-text">{freelance.pitch} {freelance.note}</p>
-      {site.links.malt && <a class="s-more" href={site.links.malt} rel="noopener">Mon profil Malt ↗</a>}
+      <p class="s-text">
+        {freelance.pitch} {freelance.note}
+      </p>
+      {site.links.malt && (
+        <a class="s-more" href={site.links.malt} rel="noopener">
+          Mon profil Malt ↗
+        </a>
+      )}
     </section>
 
-    {
-      answered.length > 0 && (
-        <section class="s-section s-section--narrow" id="faq" aria-labelledby="faq-titre">
-          <SectionHeading n={next()} cmd="man laura" title="Questions fréquentes" id="faq" />
-          {answered.map((q) => (
-            <details class="s-qa">
-              <summary>{q.question}</summary>
-              <p>{q.answer}</p>
-            </details>
-          ))}
-        </section>
-      )
-    }
+    {answered.length > 0 && (
+      <section class="s-section s-section--narrow" id="faq" aria-labelledby="faq-titre">
+        <SectionHeading n={next()} cmd="man laura" title="Questions fréquentes" id="faq" />
+        {answered.map((q) => (
+          <details class="s-qa">
+            <summary>{q.question}</summary>
+            <p>{q.answer}</p>
+          </details>
+        ))}
+      </section>
+    )}
 
-    {
-      ready.marche && (
-        <section class="s-section" id="marche" aria-labelledby="marche-titre">
-          <SectionHeading n={next()} cmd="cat marche.csv" title="Le marché DevOps junior" id="marche" />
-          <div class="s-table-wrap">
-            <table class="s-table">
-              <thead>
-                <tr><th scope="col">Région</th><th scope="col">Brut annuel</th><th scope="col">Source</th></tr>
-              </thead>
-              <tbody>
-                {salaryRows.map((r) => (
-                  <tr class:list={{ 'is-home': r.region === homeRegion }}>
-                    <td>{r.region}</td>
-                    <td>{euro.format(r.min!)} – {euro.format(r.max!)}</td>
-                    <td>{r.source}{r.date && `, ${r.date}`}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-          {methodology && <p class="s-text s-muted">{methodology}</p>}
-        </section>
-      )
-    }
+    {ready.market && (
+      <section class="s-section" id="marche" aria-labelledby="marche-titre">
+        <SectionHeading n={next()} cmd="cat marche.csv" title="Le marché DevOps junior" id="marche" />
+        <div class="s-table-wrap">
+          <table class="s-table">
+            <thead>
+              <tr>
+                <th scope="col">Région</th>
+                <th scope="col">Brut annuel</th>
+                <th scope="col">Source</th>
+              </tr>
+            </thead>
+            <tbody>
+              {salaryRows.map((r) => (
+                <tr class:list={{ 'is-home': r.region === homeRegion }}>
+                  <td>{r.region}</td>
+                  <td>
+                    {euro.format(r.min!)} – {euro.format(r.max!)}
+                  </td>
+                  <td>
+                    {r.source}
+                    {r.date && `, ${r.date}`}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        {methodology && <p class="s-text s-muted">{methodology}</p>}
+      </section>
+    )}
 
     <!-- Contact -->
     <section class="s-contact" id="contact" aria-labelledby="contact-titre">
-      <p class="s-prompt" aria-hidden="true">laura@laura-os:~$ open mail</p>
+      <p class="s-prompt" aria-hidden="true">
+        laura@laura-os:~$ open mail
+      </p>
       <h2 id="contact-titre">Un poste à me proposer ?</h2>
-      {site.email ? <a class="s-contact__mail" href={`mailto:${site.email}`}>{site.email}</a> : <Todo label="E-mail pro : site.email" />}
+      {site.email ? (
+        <a class="s-contact__mail" href={`mailto:${site.email}`}>
+          {site.email}
+        </a>
+      ) : (
+        <Todo label="E-mail pro : site.email" />
+      )}
       <p class="s-contact__links">
-        {ready.cv && <a href={site.documents.cv} download>CV (PDF)</a>}
-        {ready.lettre && <a href={site.documents.lettre} download>Lettre de motivation (PDF)</a>}
-        {site.links.linkedin && <a href={site.links.linkedin} rel="me noopener">LinkedIn ↗</a>}
-        <a href={site.links.github} rel="me noopener">GitHub ↗</a>
-        {site.links.malt && <a href={site.links.malt} rel="noopener">Malt ↗</a>}
+        {ready.cv && (
+          <a href={site.documents.cv} download>
+            CV (PDF)
+          </a>
+        )}
+        {ready.lettre && (
+          <a href={site.documents.lettre} download>
+            Lettre de motivation (PDF)
+          </a>
+        )}
+        {site.links.linkedin && (
+          <a href={site.links.linkedin} rel="me noopener">
+            LinkedIn ↗
+          </a>
+        )}
+        <a href={site.links.github} rel="me noopener">
+          GitHub ↗
+        </a>
+        {site.links.malt && (
+          <a href={site.links.malt} rel="noopener">
+            Malt ↗
+          </a>
+        )}
       </p>
     </section>
   </main>
 
   <footer class="s-footer">
-    <span>© {new Date().getFullYear()} {site.name}</span>
+    <span>
+      © {new Date().getFullYear()} {site.name}
+    </span>
     <a href="/">Retour au bureau {site.osName}</a>
-    {site.links.siteRepo && <a href={site.links.siteRepo} rel="noopener">Code du site</a>}
+    {site.links.siteRepo && (
+      <a href={site.links.siteRepo} rel="noopener">
+        Code du site
+      </a>
+    )}
   </footer>
 </Base>
 

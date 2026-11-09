@@ -1,0 +1,43 @@
+---
+import { site } from '../../config/site';
+import { recommendations } from '../../data/recommendations';
+import Icon from '../ui/Icon.astro';
+import Todo from '../ui/Todo.astro';
+---
+
+<div class="app">
+  <p class="muted">Reprises de LinkedIn avec l'accord de leurs auteurs.</p>
+  {recommendations.length > 0 ? (
+    <div>
+      {recommendations.map((r) => (
+        <figure class="quote">
+          <blockquote>« {r.quote} »</blockquote>
+          <figcaption>
+            <b>
+              {r.url ? (
+                <a href={r.url} rel="noopener">
+                  {r.author}
+                </a>
+              ) : (
+                r.author
+              )}
+            </b>{' '}
+            — {r.role} · {r.relation}
+          </figcaption>
+        </figure>
+      ))}
+    </div>
+  ) : (
+    <Todo
+      block
+      label="Ajoute tes recommandations dans src/data/recommendations.ts (fenêtre masquée en production tant que la liste est vide)"
+    />
+  )}
+  {site.links.linkedin && (
+    <div class="link-row">
+      <a href={site.links.linkedin} rel="noopener">
+        Voir sur LinkedIn <Icon name="external" size={14} />
+      </a>
+    </div>
+  )}
+</div>

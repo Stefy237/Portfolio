@@ -14,31 +14,33 @@ const { data } = Astro.props;
 const label = data ? `${data.total} contributions GitHub sur les douze derniers mois` : '';
 ---
 
-{
-  data ? (
-    <figure class="contrib">
-      <div class="contrib__scroll">
-        <div class="contrib__grid" role="img" aria-label={label}>
-          {data.weeks.map((week) => (
-            <div class="contrib__week">
-              {week.map((day) => (
-                <span class={`contrib__day l${day.level}`} title={`${day.count} le ${day.date}`} />
-              ))}
-            </div>
-          ))}
-        </div>
+{data ? (
+  <figure class="contrib">
+    <div class="contrib__scroll">
+      <div class="contrib__grid" role="img" aria-label={label}>
+        {data.weeks.map((week) => (
+          <div class="contrib__week">
+            {week.map((day) => (
+              <span class={`contrib__day l${day.level}`} title={`${day.count} le ${day.date}`} />
+            ))}
+          </div>
+        ))}
       </div>
-      <figcaption class="contrib__caption">
-        <span>Lu sur GitHub au dernier déploiement</span>
-        <span class="contrib__legend" aria-hidden="true">
-          moins <i class="contrib__day l0" /><i class="contrib__day l1" /><i class="contrib__day l2" /><i class="contrib__day l3" /><i class="contrib__day l4" /> plus
-        </span>
-      </figcaption>
-    </figure>
-  ) : (
-    <Todo block label="Graphe de contributions : ajoute GITHUB_TOKEN dans .env (voir .env.example)" />
-  )
-}
+    </div>
+    <figcaption class="contrib__caption">
+      <span>Lu sur GitHub au dernier déploiement</span>
+      <span class="contrib__legend" aria-hidden="true">
+        moins <i class="contrib__day l0" />
+        <i class="contrib__day l1" />
+        <i class="contrib__day l2" />
+        <i class="contrib__day l3" />
+        <i class="contrib__day l4" /> plus
+      </span>
+    </figcaption>
+  </figure>
+) : (
+  <Todo block label="Graphe de contributions : ajoute GITHUB_TOKEN dans .env (voir .env.example)" />
+)}
 
 <style>
   .contrib {

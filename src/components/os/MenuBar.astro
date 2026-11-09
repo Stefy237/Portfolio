@@ -7,12 +7,20 @@ const [osBase, osSuffix] = site.osName.split('·');
 
 <header class="menubar">
   <button type="button" class="menubar__brand" data-open="apropos" aria-label={`${site.osName} — à propos de ${site.firstName}`}>
-    {osBase}{osSuffix && <b>·{osSuffix}</b>}
+    {osBase}
+    {osSuffix && <b>·{osSuffix}</b>}
   </button>
-  <span class="menubar__who">{site.name} — {site.title}</span>
+  <span class="menubar__who">
+    {site.name} — {site.title}
+  </span>
   <div class="menubar__right">
-    <span class="menubar__status"><span class="status-dot" aria-hidden="true"></span>{site.availability}</span>
-    <a class="menubar__link" href="/simple">Version simple</a>
+    <span class="menubar__status">
+      <span class="status-dot" aria-hidden="true"></span>
+      {site.availability}
+    </span>
+    <a class="menubar__link" href="/simple">
+      Version simple
+    </a>
     <ThemeToggle />
   </div>
 </header>
